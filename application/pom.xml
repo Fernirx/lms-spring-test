@@ -14,6 +14,7 @@
     <!-- ========== Project Info ========= -->
     <artifactId>application</artifactId>
     <name>lms-application</name>
+    <packaging>jar</packaging>
     <description>Main Spring Boot application module</description>
 
     <!-- ========== Properties ========= -->
