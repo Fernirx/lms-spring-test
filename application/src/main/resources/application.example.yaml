@@ -54,6 +54,7 @@ springdoc:
     operations-sorter: method
     tags-sorter: alpha
     display-request-duration: true
+  show-actuator: true
 
 # === Actuator Configuration ===
 # Endpoints for monitoring and health checks (adjust for dev vs. prod).
