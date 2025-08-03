@@ -142,7 +142,7 @@ lms-system
 
 ## API Documentation
 
-* Swagger UI: `http://localhost:{port}/api/your-project-name/swagger-ui/index.html`
+* Swagger UI: `http://localhost:{port}/api/your-project-name/swagger-docs`
 * OpenAPI JSON: `http://localhost:{port}/api/your-project-name/v3/api-docs`
 
 ---

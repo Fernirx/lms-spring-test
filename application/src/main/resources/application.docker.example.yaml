@@ -45,7 +45,7 @@ springdoc:
   api-docs:
     path: ${SWAGGER_API_DOCS_PATH:/v3/api-docs}
   swagger-ui:
-    path: ${SWAGGER_UI_PATH:/swagger-ui.html}
+    path: ${SWAGGER_UI_PATH:/swagger-docs}
     operations-sorter: ${SWAGGER_OPERATIONS_SORTER:method}
     tags-sorter: ${SWAGGER_TAGS_SORTER:alpha}
     display-request-duration: ${SWAGGER_DISPLAY_REQUEST_DURATION:true}
