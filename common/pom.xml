@@ -32,6 +32,12 @@
             <artifactId>spring-boot-starter-json</artifactId>
         </dependency>
 
+        <!-- Common Starter -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-common</artifactId>
+        </dependency>
+
         <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>

@@ -80,6 +80,13 @@
                 <version>${springdoc.version}</version>
             </dependency>
 
+            <!-- Common Starter -->
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-common</artifactId>
+                <version>${springdoc.version}</version>
+            </dependency>
+
             <!-- MySQL Driver -->
             <dependency>
                 <groupId>com.mysql</groupId>
