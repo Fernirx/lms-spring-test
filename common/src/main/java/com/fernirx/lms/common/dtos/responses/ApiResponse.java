@@ -1,10 +1,9 @@
-package com.fernirx.lms.application.dto.response;
+package com.fernirx.lms.common.dtos.responses;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.List;
 

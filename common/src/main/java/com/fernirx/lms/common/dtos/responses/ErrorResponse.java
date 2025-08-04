@@ -1,4 +1,4 @@
-package com.fernirx.lms.application.dto.response;
+package com.fernirx.lms.common.dtos.responses;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
