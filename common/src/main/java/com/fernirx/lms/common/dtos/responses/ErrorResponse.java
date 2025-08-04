@@ -15,7 +15,6 @@ import java.time.ZonedDateTime;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Schema(name = "ApiResponse", description = "Standard API response wrapper")
 public class ErrorResponse {
 
     @Schema(description = "Error Code", example = "ERR_VALIDATION")

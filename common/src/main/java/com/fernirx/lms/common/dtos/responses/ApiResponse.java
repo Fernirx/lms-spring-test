@@ -13,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Schema(name = "ApiResponse", description = "Standard API response wrapper")
 public class ApiResponse<T> {
 
     @Schema(description = "Return time", example = "2025-08-04T20:00:00+07:00")
