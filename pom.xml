@@ -23,6 +23,7 @@
     <!-- ========== Modules ========= -->
     <modules>
         <module>application</module>
+        <module>common</module>
     </modules>
 
     <!-- ========== Developers ========= -->
