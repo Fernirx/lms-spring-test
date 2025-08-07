@@ -36,13 +36,13 @@ import java.lang.annotation.Target;
                         schema = @Schema(implementation = ErrorResponse.class),
                         examples = @ExampleObject(
                                 name = "Internal Server Error",
-                                value ="""
-                                        {
-                                          "timestamp": "2025-08-04T20:00:00+07:00",
-                                          "category": "SERVER",
-                                          "message": "Server Error"
-                                        }
-                                    """
+                                value = """
+                                            {
+                                              "timestamp": "2025-08-04T20:00:00+07:00",
+                                              "category": "SERVER",
+                                              "message": "Server Error"
+                                            }
+                                        """
                         )
                 )
         )
