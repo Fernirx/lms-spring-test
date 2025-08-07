@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Schema(description = "Specific details of the error in the system")
+@Schema(name = "Error Detail", description = "Specific details of the error in the system")
 public class ErrorDetail {
 
     @Schema(description = "Error code", example = "ERR_VALIDATION")
