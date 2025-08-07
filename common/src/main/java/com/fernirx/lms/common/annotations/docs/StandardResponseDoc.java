@@ -1,4 +1,4 @@
-package com.fernirx.lms.common.annotations;
+package com.fernirx.lms.common.annotations.docs;
 
 import com.fernirx.lms.common.dtos.responses.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
