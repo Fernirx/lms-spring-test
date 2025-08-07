@@ -3,2201 +3,860 @@
 -- Model: New Model    Version: 1.0
 -- MySQL Workbench Forward Engineering
 
-SET
-@OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
-SET
-@OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET
-@OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
 -- Schema lms_db
 -- -----------------------------------------------------
-DROP SCHEMA IF EXISTS `lms_db`;
+DROP SCHEMA IF EXISTS `lms_db` ;
 
 -- -----------------------------------------------------
 -- Schema lms_db
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `lms_db` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
-USE
-`lms_db` ;
+CREATE SCHEMA IF NOT EXISTS `lms_db` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci ;
+USE `lms_db` ;
 
 -- -----------------------------------------------------
 -- Table `lms_db`.`roles`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `lms_db`.`roles`;
+DROP TABLE IF EXISTS `lms_db`.`roles` ;
 
-CREATE TABLE IF NOT EXISTS `lms_db`.`roles`
-(
-    `id`
-    INT
-    NOT
-    NULL
-    AUTO_INCREMENT,
-    `name`
-    VARCHAR
-(
-    50
-) NOT NULL COMMENT 'student, teacher, dept_head, acad_affairs',
-    `description` TEXT NULL DEFAULT NULL,
-    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY
-(
-    `id`
-),
-    UNIQUE INDEX `name_UNIQUE`
-(
-    `name`
-    ASC
-) VISIBLE)
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8mb4
-    COLLATE = utf8mb4_unicode_520_ci;
+CREATE TABLE IF NOT EXISTS `lms_db`.`roles` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(50) NOT NULL COMMENT 'student, teacher, dept_head, acad_affairs',
+  `description` TEXT NULL DEFAULT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_520_ci;
 
 
 -- -----------------------------------------------------
 -- Table `lms_db`.`users`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `lms_db`.`users`;
+DROP TABLE IF EXISTS `lms_db`.`users` ;
 
-CREATE TABLE IF NOT EXISTS `lms_db`.`users`
-(
-    `id`
-    INT
-    NOT
-    NULL
-    AUTO_INCREMENT,
-    `role_id`
-    INT
-    NOT
-    NULL,
-    `username`
-    VARCHAR
-(
-    50
-) NOT NULL,
-    `password` VARCHAR
-(
-    255
-) NOT NULL,
-    `enable` TINYINT
-(
-    1
-) NOT NULL DEFAULT 0,
-    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY
-(
-    `id`
-),
-    UNIQUE INDEX `username_UNIQUE`
-(
-    `username`
-    ASC
-) VISIBLE,
-    INDEX `idx_users_role`
-(
-    `role_id`
-    ASC
-) VISIBLE,
-    CONSTRAINT `fk_users_roles`
-    FOREIGN KEY
-(
-    `role_id`
-)
-    REFERENCES `lms_db`.`roles`
-(
-    `id`
-))
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8mb4
-    COLLATE = utf8mb4_unicode_520_ci;
+CREATE TABLE IF NOT EXISTS `lms_db`.`users` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `role_id` INT NOT NULL,
+  `username` VARCHAR(50) NOT NULL,
+  `password` VARCHAR(255) NOT NULL,
+  `enable` TINYINT(1) NOT NULL DEFAULT 0,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE,
+  INDEX `idx_users_role` (`role_id` ASC) VISIBLE,
+  CONSTRAINT `fk_users_roles`
+    FOREIGN KEY (`role_id`)
+    REFERENCES `lms_db`.`roles` (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_520_ci;
 
 
 -- -----------------------------------------------------
 -- Table `lms_db`.`departments`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `lms_db`.`departments`;
+DROP TABLE IF EXISTS `lms_db`.`departments` ;
 
-CREATE TABLE IF NOT EXISTS `lms_db`.`departments`
-(
-    `id`
-    INT
-    NOT
-    NULL
-    AUTO_INCREMENT,
-    `code`
-    VARCHAR
-(
-    10
-) NOT NULL,
-    `name` VARCHAR
-(
-    100
-) NOT NULL,
-    `description` TEXT NULL DEFAULT NULL,
-    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY
-(
-    `id`
-),
-    UNIQUE INDEX `code_UNIQUE`
-(
-    `code`
-    ASC
-) VISIBLE,
-    UNIQUE INDEX `name_UNIQUE`
-(
-    `name`
-    ASC
-) VISIBLE)
-    ENGINE = InnoDB;
+CREATE TABLE IF NOT EXISTS `lms_db`.`departments` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `code` VARCHAR(10) NOT NULL,
+  `name` VARCHAR(100) NOT NULL,
+  `description` TEXT NULL DEFAULT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `code_UNIQUE` (`code` ASC) VISIBLE,
+  UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE)
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
 -- Table `lms_db`.`majors`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `lms_db`.`majors`;
+DROP TABLE IF EXISTS `lms_db`.`majors` ;
 
-CREATE TABLE IF NOT EXISTS `lms_db`.`majors`
-(
-    `id`
-    INT
-    NOT
-    NULL
-    AUTO_INCREMENT,
-    `department_id`
-    INT
-    NOT
-    NULL,
-    `code`
-    VARCHAR
-(
-    10
-) NOT NULL,
-    `name` VARCHAR
-(
-    100
-) NOT NULL,
-    `degree_level` ENUM
-(
-    'bachelor',
-    'engineer',
-    'phd'
-) NOT NULL DEFAULT 'bachelor',
-    `description` TEXT NULL DEFAULT NULL,
-    `active` TINYINT
-(
-    1
-) NOT NULL DEFAULT 1,
-    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY
-(
-    `id`
-),
-    UNIQUE INDEX `code_UNIQUE`
-(
-    `code`
-    ASC
-) VISIBLE,
-    UNIQUE INDEX `name_UNIQUE`
-(
-    `name`
-    ASC
-) VISIBLE,
-    INDEX `fk_majors_departments_idx`
-(
-    `department_id`
-    ASC
-) VISIBLE,
-    CONSTRAINT `fk_majors_departments`
-    FOREIGN KEY
-(
-    `department_id`
-)
-    REFERENCES `lms_db`.`departments`
-(
-    `id`
-)
-                                                              ON DELETE RESTRICT
-                                                              ON UPDATE RESTRICT)
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8mb4
-    COLLATE = utf8mb4_unicode_520_ci;
+CREATE TABLE IF NOT EXISTS `lms_db`.`majors` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `department_id` INT NOT NULL,
+  `code` VARCHAR(10) NOT NULL,
+  `name` VARCHAR(100) NOT NULL,
+  `degree_level` ENUM('bachelor', 'engineer', 'phd') NOT NULL DEFAULT 'bachelor',
+  `description` TEXT NULL DEFAULT NULL,
+  `active` TINYINT(1) NOT NULL DEFAULT 1,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `code_UNIQUE` (`code` ASC) VISIBLE,
+  UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE,
+  INDEX `fk_majors_departments_idx` (`department_id` ASC) VISIBLE,
+  CONSTRAINT `fk_majors_departments`
+    FOREIGN KEY (`department_id`)
+    REFERENCES `lms_db`.`departments` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_520_ci;
 
 
 -- -----------------------------------------------------
 -- Table `lms_db`.`teachers`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `lms_db`.`teachers`;
+DROP TABLE IF EXISTS `lms_db`.`teachers` ;
 
-CREATE TABLE IF NOT EXISTS `lms_db`.`teachers`
-(
-    `id`
-    INT
-    NOT
-    NULL
-    AUTO_INCREMENT,
-    `user_id`
-    INT
-    NOT
-    NULL,
-    `department_id`
-    INT
-    NOT
-    NULL,
-    `code`
-    VARCHAR
-(
-    10
-) NOT NULL,
-    `first_name` VARCHAR
-(
-    100
-) NOT NULL,
-    `last_name` VARCHAR
-(
-    100
-) NOT NULL,
-    `gender` ENUM
-(
-    'male',
-    'female',
-    'other'
-) NULL DEFAULT NULL,
-    `dob` DATE NULL DEFAULT NULL,
-    `phone` VARCHAR
-(
-    15
-) NOT NULL,
-    `email` VARCHAR
-(
-    100
-) NOT NULL,
-    `address` VARCHAR
-(
-    100
-) NULL DEFAULT NULL,
-    `academic_degree` VARCHAR
-(
-    100
-) NULL DEFAULT NULL,
-    `lecturer_type` ENUM
-(
-    'full_time',
-    'visiting',
-    'adjunct',
-    'contractual'
-) NOT NULL,
-    `note` TEXT NULL DEFAULT NULL,
-    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    UNIQUE INDEX `teacher_code_UNIQUE`
-(
-    `code`
-    ASC
-) VISIBLE,
-    PRIMARY KEY
-(
-    `id`
-),
-    UNIQUE INDEX `user_id_UNIQUE`
-(
-    `user_id`
-    ASC
-) VISIBLE,
-    UNIQUE INDEX `email_UNIQUE`
-(
-    `email`
-    ASC
-) VISIBLE,
-    UNIQUE INDEX `phone_UNIQUE`
-(
-    `phone`
-    ASC
-) VISIBLE,
-    INDEX `fk_teachers_departments_idx`
-(
-    `department_id`
-    ASC
-) VISIBLE,
-    CONSTRAINT `fk_teachers_users`
-    FOREIGN KEY
-(
-    `user_id`
-)
-    REFERENCES `lms_db`.`users`
-(
-    `id`
-),
-    CONSTRAINT `fk_teachers_departments`
-    FOREIGN KEY
-(
-    `department_id`
-)
-    REFERENCES `lms_db`.`departments`
-(
-    `id`
-)
-                                                              ON DELETE RESTRICT
-                                                              ON UPDATE RESTRICT)
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8mb4
-    COLLATE = utf8mb4_unicode_520_ci;
+CREATE TABLE IF NOT EXISTS `lms_db`.`teachers` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `user_id` INT NOT NULL,
+  `department_id` INT NOT NULL,
+  `code` VARCHAR(10) NOT NULL,
+  `first_name` VARCHAR(100) NOT NULL,
+  `last_name` VARCHAR(100) NOT NULL,
+  `gender` ENUM('male', 'female', 'other') NULL DEFAULT NULL,
+  `dob` DATE NULL DEFAULT NULL,
+  `phone` VARCHAR(15) NOT NULL,
+  `email` VARCHAR(100) NOT NULL,
+  `address` VARCHAR(100) NULL DEFAULT NULL,
+  `academic_degree` VARCHAR(100) NULL DEFAULT NULL,
+  `lecturer_type` ENUM('full_time', 'visiting', 'adjunct', 'contractual') NOT NULL,
+  `note` TEXT NULL DEFAULT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  UNIQUE INDEX `teacher_code_UNIQUE` (`code` ASC) VISIBLE,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `user_id_UNIQUE` (`user_id` ASC) VISIBLE,
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE,
+  UNIQUE INDEX `phone_UNIQUE` (`phone` ASC) VISIBLE,
+  INDEX `fk_teachers_departments_idx` (`department_id` ASC) VISIBLE,
+  CONSTRAINT `fk_teachers_users`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `lms_db`.`users` (`id`),
+  CONSTRAINT `fk_teachers_departments`
+    FOREIGN KEY (`department_id`)
+    REFERENCES `lms_db`.`departments` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_520_ci;
 
 
 -- -----------------------------------------------------
 -- Table `lms_db`.`classes`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `lms_db`.`classes`;
+DROP TABLE IF EXISTS `lms_db`.`classes` ;
 
-CREATE TABLE IF NOT EXISTS `lms_db`.`classes`
-(
-    `id`
-    INT
-    NOT
-    NULL
-    AUTO_INCREMENT,
-    `teacher_id`
-    INT
-    NOT
-    NULL,
-    `major_id`
-    INT
-    NOT
-    NULL,
-    `code`
-    VARCHAR
-(
-    10
-) NOT NULL,
-    `name` VARCHAR
-(
-    100
-) NOT NULL,
-    `cohort_year` YEAR NOT NULL,
-    `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY
-(
-    `id`
-),
-    UNIQUE INDEX `code_UNIQUE`
-(
-    `code`
-    ASC
-) VISIBLE,
-    INDEX `fk_classes_majors_idx`
-(
-    `major_id`
-    ASC
-) VISIBLE,
-    INDEX `fk_classes_teachers_idx`
-(
-    `teacher_id`
-    ASC
-) VISIBLE,
-    CONSTRAINT `fk_classes_majors`
-    FOREIGN KEY
-(
-    `major_id`
-)
-    REFERENCES `lms_db`.`majors`
-(
-    `id`
-)
-                                                          ON DELETE CASCADE
-                                                          ON UPDATE RESTRICT,
-    CONSTRAINT `fk_classes_teachers`
-    FOREIGN KEY
-(
-    `teacher_id`
-)
-    REFERENCES `lms_db`.`teachers`
-(
-    `id`
-)
-                                                          ON DELETE RESTRICT
-                                                          ON UPDATE RESTRICT)
-    ENGINE = InnoDB;
+CREATE TABLE IF NOT EXISTS `lms_db`.`classes` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `teacher_id` INT NOT NULL,
+  `major_id` INT NOT NULL,
+  `code` VARCHAR(10) NOT NULL,
+  `name` VARCHAR(100) NOT NULL,
+  `cohort_year` YEAR NOT NULL,
+  `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `code_UNIQUE` (`code` ASC) VISIBLE,
+  INDEX `fk_classes_majors_idx` (`major_id` ASC) VISIBLE,
+  INDEX `fk_classes_teachers_idx` (`teacher_id` ASC) VISIBLE,
+  CONSTRAINT `fk_classes_majors`
+    FOREIGN KEY (`major_id`)
+    REFERENCES `lms_db`.`majors` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE RESTRICT,
+  CONSTRAINT `fk_classes_teachers`
+    FOREIGN KEY (`teacher_id`)
+    REFERENCES `lms_db`.`teachers` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT)
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
 -- Table `lms_db`.`students`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `lms_db`.`students`;
+DROP TABLE IF EXISTS `lms_db`.`students` ;
 
-CREATE TABLE IF NOT EXISTS `lms_db`.`students`
-(
-    `id`
-    INT
-    NOT
-    NULL
-    AUTO_INCREMENT,
-    `user_id`
-    INT
-    NOT
-    NULL,
-    `class_id`
-    INT
-    NOT
-    NULL,
-    `code`
-    VARCHAR
-(
-    10
-) NOT NULL,
-    `first_name` VARCHAR
-(
-    100
-) NOT NULL,
-    `last_name` VARCHAR
-(
-    100
-) NOT NULL,
-    `gender` ENUM
-(
-    'male',
-    'female',
-    'other'
-) NULL DEFAULT NULL,
-    `dob` DATE NULL DEFAULT NULL,
-    `phone` VARCHAR
-(
-    15
-) NOT NULL,
-    `email` VARCHAR
-(
-    100
-) NOT NULL,
-    `address` VARCHAR
-(
-    100
-) NULL DEFAULT NULL,
-    `enroll_date` DATE NOT NULL,
-    `status` ENUM
-(
-    'active',
-    'inactive',
-    'graduated',
-    'dropped'
-) NOT NULL DEFAULT 'active',
-    `note` TEXT NULL DEFAULT NULL,
-    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    UNIQUE INDEX `student_code_UNIQUE`
-(
-    `code`
-    ASC
-) VISIBLE,
-    PRIMARY KEY
-(
-    `id`
-),
-    UNIQUE INDEX `user_id_UNIQUE`
-(
-    `user_id`
-    ASC
-) VISIBLE,
-    UNIQUE INDEX `phone_UNIQUE`
-(
-    `phone`
-    ASC
-) VISIBLE,
-    UNIQUE INDEX `email_UNIQUE`
-(
-    `email`
-    ASC
-) VISIBLE,
-    INDEX `fk_students_classes_idx`
-(
-    `class_id`
-    ASC
-) VISIBLE,
-    CONSTRAINT `fk_students_users`
-    FOREIGN KEY
-(
-    `user_id`
-)
-    REFERENCES `lms_db`.`users`
-(
-    `id`
-),
-    CONSTRAINT `fk_students_classes`
-    FOREIGN KEY
-(
-    `class_id`
-)
-    REFERENCES `lms_db`.`classes`
-(
-    `id`
-)
-                                                              ON DELETE RESTRICT
-                                                              ON UPDATE CASCADE)
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8mb4
-    COLLATE = utf8mb4_unicode_520_ci;
+CREATE TABLE IF NOT EXISTS `lms_db`.`students` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `user_id` INT NOT NULL,
+  `class_id` INT NOT NULL,
+  `code` VARCHAR(10) NOT NULL,
+  `first_name` VARCHAR(100) NOT NULL,
+  `last_name` VARCHAR(100) NOT NULL,
+  `gender` ENUM('male', 'female', 'other') NULL DEFAULT NULL,
+  `dob` DATE NULL DEFAULT NULL,
+  `phone` VARCHAR(15) NOT NULL,
+  `email` VARCHAR(100) NOT NULL,
+  `address` VARCHAR(100) NULL DEFAULT NULL,
+  `enroll_date` DATE NOT NULL,
+  `status` ENUM('active', 'inactive', 'graduated', 'dropped') NOT NULL DEFAULT 'active',
+  `note` TEXT NULL DEFAULT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  UNIQUE INDEX `student_code_UNIQUE` (`code` ASC) VISIBLE,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `user_id_UNIQUE` (`user_id` ASC) VISIBLE,
+  UNIQUE INDEX `phone_UNIQUE` (`phone` ASC) VISIBLE,
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE,
+  INDEX `fk_students_classes_idx` (`class_id` ASC) VISIBLE,
+  CONSTRAINT `fk_students_users`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `lms_db`.`users` (`id`),
+  CONSTRAINT `fk_students_classes`
+    FOREIGN KEY (`class_id`)
+    REFERENCES `lms_db`.`classes` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_520_ci;
 
 
 -- -----------------------------------------------------
 -- Table `lms_db`.`offices`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `lms_db`.`offices`;
+DROP TABLE IF EXISTS `lms_db`.`offices` ;
 
-CREATE TABLE IF NOT EXISTS `lms_db`.`offices`
-(
-    `id`
-    INT
-    NOT
-    NULL
-    AUTO_INCREMENT,
-    `code`
-    VARCHAR
-(
-    10
-) NOT NULL,
-    `name` VARCHAR
-(
-    100
-) NOT NULL,
-    `description` TEXT NULL,
-    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY
-(
-    `id`
-),
-    UNIQUE INDEX `code_name_UNIQUE`
-(
-    `code`
-    ASC,
-    `name`
-    ASC
-) VISIBLE)
-    ENGINE = InnoDB;
+CREATE TABLE IF NOT EXISTS `lms_db`.`offices` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `code` VARCHAR(10) NOT NULL,
+  `name` VARCHAR(100) NOT NULL,
+  `description` TEXT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `code_name_UNIQUE` (`code` ASC, `name` ASC) VISIBLE)
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
 -- Table `lms_db`.`employees`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `lms_db`.`employees`;
+DROP TABLE IF EXISTS `lms_db`.`employees` ;
 
-CREATE TABLE IF NOT EXISTS `lms_db`.`employees`
-(
-    `id`
-    INT
-    NOT
-    NULL
-    AUTO_INCREMENT,
-    `user_id`
-    INT
-    NOT
-    NULL,
-    `office_id`
-    INT
-    NOT
-    NULL,
-    `code`
-    VARCHAR
-(
-    10
-) NOT NULL,
-    `first_name` VARCHAR
-(
-    100
-) NOT NULL,
-    `last_name` VARCHAR
-(
-    100
-) NOT NULL,
-    `gender` ENUM
-(
-    'male',
-    'female',
-    'other'
-) NULL DEFAULT NULL,
-    `dob` DATE NULL DEFAULT NULL,
-    `phone` VARCHAR
-(
-    15
-) NOT NULL,
-    `email` VARCHAR
-(
-    100
-) NOT NULL,
-    `position` VARCHAR
-(
-    100
-) NULL DEFAULT NULL,
-    `joined_date` DATE NOT NULL,
-    `note` TEXT NULL DEFAULT NULL,
-    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY
-(
-    `id`
-),
-    UNIQUE INDEX `user_id_UNIQUE`
-(
-    `user_id`
-    ASC
-) VISIBLE,
-    UNIQUE INDEX `code_UNIQUE`
-(
-    `code`
-    ASC
-) VISIBLE,
-    UNIQUE INDEX `phone_UNIQUE`
-(
-    `phone`
-    ASC
-) VISIBLE,
-    UNIQUE INDEX `email_UNIQUE`
-(
-    `email`
-    ASC
-) VISIBLE,
-    INDEX `fk_employees_offices_idx`
-(
-    `office_id`
-    ASC
-) INVISIBLE,
-    CONSTRAINT `fk_academic_staffs_users`
-    FOREIGN KEY
-(
-    `user_id`
-)
-    REFERENCES `lms_db`.`users`
-(
-    `id`
-),
-    CONSTRAINT `fk_employees_offices`
-    FOREIGN KEY
-(
-    `office_id`
-)
-    REFERENCES `lms_db`.`offices`
-(
-    `id`
-)
-                                                              ON DELETE NO ACTION
-                                                              ON UPDATE NO ACTION)
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8mb4
-    COLLATE = utf8mb4_unicode_520_ci;
+CREATE TABLE IF NOT EXISTS `lms_db`.`employees` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `user_id` INT NOT NULL,
+  `office_id` INT NOT NULL,
+  `code` VARCHAR(10) NOT NULL,
+  `first_name` VARCHAR(100) NOT NULL,
+  `last_name` VARCHAR(100) NOT NULL,
+  `gender` ENUM('male', 'female', 'other') NULL DEFAULT NULL,
+  `dob` DATE NULL DEFAULT NULL,
+  `phone` VARCHAR(15) NOT NULL,
+  `email` VARCHAR(100) NOT NULL,
+  `position` VARCHAR(100) NULL DEFAULT NULL,
+  `joined_date` DATE NOT NULL,
+  `note` TEXT NULL DEFAULT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `user_id_UNIQUE` (`user_id` ASC) VISIBLE,
+  UNIQUE INDEX `code_UNIQUE` (`code` ASC) VISIBLE,
+  UNIQUE INDEX `phone_UNIQUE` (`phone` ASC) VISIBLE,
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE,
+  INDEX `fk_employees_offices_idx` (`office_id` ASC) INVISIBLE,
+  CONSTRAINT `fk_academic_staffs_users`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `lms_db`.`users` (`id`),
+  CONSTRAINT `fk_employees_offices`
+    FOREIGN KEY (`office_id`)
+    REFERENCES `lms_db`.`offices` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_520_ci;
 
 
 -- -----------------------------------------------------
 -- Table `lms_db`.`school_years`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `lms_db`.`school_years`;
+DROP TABLE IF EXISTS `lms_db`.`school_years` ;
 
-CREATE TABLE IF NOT EXISTS `lms_db`.`school_years`
-(
-    `id`
-    INT
-    NOT
-    NULL
-    AUTO_INCREMENT,
-    `code`
-    VARCHAR
-(
-    10
-) NOT NULL,
-    `name` VARCHAR
-(
-    50
-) NOT NULL,
-    `start_year` YEAR
-(
-    4
-) NOT NULL,
-    `end_year` YEAR
-(
-    4
-) NOT NULL,
-    `is_current` TINYINT
-(
-    1
-) NOT NULL DEFAULT 0,
-    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY
-(
-    `id`
-),
-    UNIQUE INDEX `start_end_UNIQUE`
-(
-    `start_year`
-    ASC,
-    `end_year`
-    ASC
-) INVISIBLE,
-    UNIQUE INDEX `code_UNIQUE`
-(
-    `code`
-    ASC
-) INVISIBLE,
-    UNIQUE INDEX `name_UNIQUE`
-(
-    `name`
-    ASC
-) VISIBLE)
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8mb4
-    COLLATE = utf8mb4_unicode_520_ci;
+CREATE TABLE IF NOT EXISTS `lms_db`.`school_years` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `code` VARCHAR(10) NOT NULL,
+  `name` VARCHAR(50) NOT NULL,
+  `start_year` YEAR(4) NOT NULL,
+  `end_year` YEAR(4) NOT NULL,
+  `is_current` TINYINT(1) NOT NULL DEFAULT 0,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `start_end_UNIQUE` (`start_year` ASC, `end_year` ASC) INVISIBLE,
+  UNIQUE INDEX `code_UNIQUE` (`code` ASC) INVISIBLE,
+  UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_520_ci;
 
 
 -- -----------------------------------------------------
 -- Table `lms_db`.`semesters`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `lms_db`.`semesters`;
+DROP TABLE IF EXISTS `lms_db`.`semesters` ;
 
-CREATE TABLE IF NOT EXISTS `lms_db`.`semesters`
-(
-    `id`
-    INT
-    NOT
-    NULL
-    AUTO_INCREMENT,
-    `school_year_id`
-    INT
-    NOT
-    NULL,
-    `code`
-    VARCHAR
-(
-    10
-) NOT NULL,
-    `name` VARCHAR
-(
-    50
-) NOT NULL,
-    `start_date` DATE NOT NULL,
-    `end_date` DATE NOT NULL,
-    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY
-(
-    `id`
-),
-    UNIQUE INDEX `dates_UNIQUE`
-(
-    `start_date`
-    ASC,
-    `end_date`
-    ASC
-) VISIBLE,
-    UNIQUE INDEX `code_UNIQUE`
-(
-    `code`
-    ASC
-) VISIBLE,
-    UNIQUE INDEX `name_UNIQUE`
-(
-    `name`
-    ASC
-) VISIBLE,
-    INDEX `fk_semesters_school_years_idx`
-(
-    `school_year_id`
-    ASC
-) VISIBLE,
-    CONSTRAINT `fk_semesters_school_years`
-    FOREIGN KEY
-(
-    `school_year_id`
-)
-    REFERENCES `lms_db`.`school_years`
-(
-    `id`
-)
-                                                              ON DELETE RESTRICT
-                                                              ON UPDATE RESTRICT)
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8mb4
-    COLLATE = utf8mb4_unicode_520_ci;
+CREATE TABLE IF NOT EXISTS `lms_db`.`semesters` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `school_year_id` INT NOT NULL,
+  `code` VARCHAR(10) NOT NULL,
+  `name` VARCHAR(50) NOT NULL,
+  `start_date` DATE NOT NULL,
+  `end_date` DATE NOT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `dates_UNIQUE` (`start_date` ASC, `end_date` ASC) VISIBLE,
+  UNIQUE INDEX `code_UNIQUE` (`code` ASC) VISIBLE,
+  UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE,
+  INDEX `fk_semesters_school_years_idx` (`school_year_id` ASC) VISIBLE,
+  CONSTRAINT `fk_semesters_school_years`
+    FOREIGN KEY (`school_year_id`)
+    REFERENCES `lms_db`.`school_years` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_520_ci;
 
 
 -- -----------------------------------------------------
 -- Table `lms_db`.`subjects`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `lms_db`.`subjects`;
+DROP TABLE IF EXISTS `lms_db`.`subjects` ;
 
-CREATE TABLE IF NOT EXISTS `lms_db`.`subjects`
-(
-    `id`
-    INT
-    NOT
-    NULL
-    AUTO_INCREMENT,
-    `major_id`
-    INT
-    NOT
-    NULL,
-    `code`
-    VARCHAR
-(
-    10
-) NOT NULL,
-    `name` VARCHAR
-(
-    50
-) NOT NULL,
-    `type` ENUM
-(
-    'theory',
-    'practical'
-) NOT NULL DEFAULT 'theory',
-    `academic_credits` INT UNSIGNED NOT NULL,
-    `billing_credits` INT UNSIGNED NOT NULL,
-    `description` TEXT NULL DEFAULT NULL,
-    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY
-(
-    `id`
-),
-    UNIQUE INDEX `code_UNIQUE`
-(
-    `code`
-    ASC
-) VISIBLE,
-    INDEX `idx_subjects_major`
-(
-    `major_id`
-    ASC
-) VISIBLE,
-    UNIQUE INDEX `name_UNIQUE`
-(
-    `name`
-    ASC
-) VISIBLE,
-    CONSTRAINT `fk_subjects_majors`
-    FOREIGN KEY
-(
-    `major_id`
-)
-    REFERENCES `lms_db`.`majors`
-(
-    `id`
-))
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8mb4
-    COLLATE = utf8mb4_unicode_520_ci;
+CREATE TABLE IF NOT EXISTS `lms_db`.`subjects` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `major_id` INT NOT NULL,
+  `code` VARCHAR(10) NOT NULL,
+  `name` VARCHAR(50) NOT NULL,
+  `type` ENUM('theory', 'practical') NOT NULL DEFAULT 'theory',
+  `academic_credits` INT UNSIGNED NOT NULL,
+  `billing_credits` INT UNSIGNED NOT NULL,
+  `description` TEXT NULL DEFAULT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `code_UNIQUE` (`code` ASC) VISIBLE,
+  INDEX `idx_subjects_major` (`major_id` ASC) VISIBLE,
+  UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE,
+  CONSTRAINT `fk_subjects_majors`
+    FOREIGN KEY (`major_id`)
+    REFERENCES `lms_db`.`majors` (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_520_ci;
 
 
 -- -----------------------------------------------------
 -- Table `lms_db`.`course_offerings`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `lms_db`.`course_offerings`;
+DROP TABLE IF EXISTS `lms_db`.`course_offerings` ;
 
-CREATE TABLE IF NOT EXISTS `lms_db`.`course_offerings`
-(
-    `id`
-    INT
-    NOT
-    NULL
-    AUTO_INCREMENT,
-    `subject_id`
-    INT
-    NOT
-    NULL,
-    `semester_id`
-    INT
-    NOT
-    NULL,
-    `group_code`
-    VARCHAR
-(
-    10
-) NOT NULL,
-    `capacity` INT NOT NULL DEFAULT 0,
-    `start_date` DATE NOT NULL,
-    `end_date` DATE NOT NULL,
-    `description` TEXT NULL DEFAULT NULL,
-    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY
-(
-    `id`
-),
-    INDEX `idx_offering_semester`
-(
-    `semester_id`
-    ASC
-) VISIBLE,
-    UNIQUE INDEX `subject_semester_group_UNIQUE`
-(
-    `subject_id`
-    ASC,
-    `group_code`
-    ASC,
-    `semester_id`
-    ASC
-) VISIBLE,
-    CONSTRAINT `fk_offerings_subjects`
-    FOREIGN KEY
-(
-    `subject_id`
-)
-    REFERENCES `lms_db`.`subjects`
-(
-    `id`
-)
-                                                              ON DELETE CASCADE
-                                                              ON UPDATE CASCADE,
-    CONSTRAINT `fk_offerings_semesters`
-    FOREIGN KEY
-(
-    `semester_id`
-)
-    REFERENCES `lms_db`.`semesters`
-(
-    `id`
-)
-                                                              ON DELETE CASCADE
-                                                              ON UPDATE CASCADE)
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8mb4
-    COLLATE = utf8mb4_unicode_520_ci;
+CREATE TABLE IF NOT EXISTS `lms_db`.`course_offerings` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `subject_id` INT NOT NULL,
+  `semester_id` INT NOT NULL,
+  `group_code` VARCHAR(10) NOT NULL,
+  `capacity` INT NOT NULL DEFAULT 0,
+  `start_date` DATE NOT NULL,
+  `end_date` DATE NOT NULL,
+  `description` TEXT NULL DEFAULT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  INDEX `idx_offering_semester` (`semester_id` ASC) VISIBLE,
+  UNIQUE INDEX `subject_semester_group_UNIQUE` (`subject_id` ASC, `group_code` ASC, `semester_id` ASC) VISIBLE,
+  CONSTRAINT `fk_offerings_subjects`
+    FOREIGN KEY (`subject_id`)
+    REFERENCES `lms_db`.`subjects` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_offerings_semesters`
+    FOREIGN KEY (`semester_id`)
+    REFERENCES `lms_db`.`semesters` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_520_ci;
 
 
 -- -----------------------------------------------------
 -- Table `lms_db`.`classrooms`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `lms_db`.`classrooms`;
+DROP TABLE IF EXISTS `lms_db`.`classrooms` ;
 
-CREATE TABLE IF NOT EXISTS `lms_db`.`classrooms`
-(
-    `id`
-    INT
-    NOT
-    NULL
-    AUTO_INCREMENT,
-    `code`
-    VARCHAR
-(
-    10
-) NOT NULL,
-    `location` VARCHAR
-(
-    100
-) NOT NULL,
-    `capacity` INT NOT NULL,
-    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY
-(
-    `id`
-),
-    UNIQUE INDEX `code_UNIQUE`
-(
-    `code`
-    ASC
-) VISIBLE)
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8mb4
-    COLLATE = utf8mb4_unicode_520_ci;
+CREATE TABLE IF NOT EXISTS `lms_db`.`classrooms` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `code` VARCHAR(10) NOT NULL,
+  `location` VARCHAR(100) NOT NULL,
+  `capacity` INT NOT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `code_UNIQUE` (`code` ASC) VISIBLE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_520_ci;
 
 
 -- -----------------------------------------------------
 -- Table `lms_db`.`course_assignments`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `lms_db`.`course_assignments`;
+DROP TABLE IF EXISTS `lms_db`.`course_assignments` ;
 
-CREATE TABLE IF NOT EXISTS `lms_db`.`course_assignments`
-(
-    `id`
-    INT
-    NOT
-    NULL
-    AUTO_INCREMENT,
-    `offering_id`
-    INT
-    NOT
-    NULL,
-    `teacher_id`
-    INT
-    NOT
-    NULL,
-    `status`
-    ENUM
-(
-    'pending',
-    'approved',
-    'rejected',
-    'canceled'
-) NOT NULL DEFAULT 'pending',
-    `cancel_reason` TEXT NULL DEFAULT NULL,
-    `canceled_at` DATE NULL DEFAULT NULL,
-    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY
-(
-    `id`
-),
-    INDEX `fk_assign_offerings`
-(
-    `offering_id`
-    ASC
-) VISIBLE,
-    INDEX `fk_assign_teachers`
-(
-    `teacher_id`
-    ASC
-) VISIBLE,
-    UNIQUE INDEX `course_offering_teacher_UNIQUE`
-(
-    `offering_id`
-    ASC,
-    `teacher_id`
-    ASC
-) VISIBLE,
-    CONSTRAINT `fk_assign_offerings`
-    FOREIGN KEY
-(
-    `offering_id`
-)
-    REFERENCES `lms_db`.`course_offerings`
-(
-    `id`
-)
-                                                              ON DELETE CASCADE
-                                                              ON UPDATE CASCADE,
-    CONSTRAINT `fk_assign_teachers`
-    FOREIGN KEY
-(
-    `teacher_id`
-)
-    REFERENCES `lms_db`.`teachers`
-(
-    `id`
-))
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8mb4
-    COLLATE = utf8mb4_unicode_520_ci;
+CREATE TABLE IF NOT EXISTS `lms_db`.`course_assignments` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `offering_id` INT NOT NULL,
+  `teacher_id` INT NOT NULL,
+  `status` ENUM('pending', 'approved', 'rejected', 'canceled') NOT NULL DEFAULT 'pending',
+  `cancel_reason` TEXT NULL DEFAULT NULL,
+  `canceled_at` DATE NULL DEFAULT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  INDEX `fk_assign_offerings` (`offering_id` ASC) VISIBLE,
+  INDEX `fk_assign_teachers` (`teacher_id` ASC) VISIBLE,
+  UNIQUE INDEX `course_offering_teacher_UNIQUE` (`offering_id` ASC, `teacher_id` ASC) VISIBLE,
+  CONSTRAINT `fk_assign_offerings`
+    FOREIGN KEY (`offering_id`)
+    REFERENCES `lms_db`.`course_offerings` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_assign_teachers`
+    FOREIGN KEY (`teacher_id`)
+    REFERENCES `lms_db`.`teachers` (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_520_ci;
 
 
 -- -----------------------------------------------------
 -- Table `lms_db`.`schedules`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `lms_db`.`schedules`;
+DROP TABLE IF EXISTS `lms_db`.`schedules` ;
 
-CREATE TABLE IF NOT EXISTS `lms_db`.`schedules`
-(
-    `id`
-    INT
-    NOT
-    NULL
-    AUTO_INCREMENT,
-    `classroom_id`
-    INT
-    NOT
-    NULL,
-    `assignment_id`
-    INT
-    NOT
-    NULL,
-    `day_of_week`
-    ENUM
-(
-    'Mon',
-    'Tue',
-    'Wed',
-    'Thu',
-    'Fri',
-    'Sat',
-    'Sun'
-) NOT NULL,
-    `start_time` TIME NOT NULL,
-    `end_time` TIME NOT NULL,
-    `note` TEXT NULL DEFAULT NULL,
-    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY
-(
-    `id`
-),
-    INDEX `idx_sched_classroom`
-(
-    `classroom_id`
-    ASC
-) VISIBLE,
-    INDEX `fk_schedules_assignments_idx`
-(
-    `assignment_id`
-    ASC
-) VISIBLE,
-    CONSTRAINT `fk_schedules_classrooms`
-    FOREIGN KEY
-(
-    `classroom_id`
-)
-    REFERENCES `lms_db`.`classrooms`
-(
-    `id`
-),
-    CONSTRAINT `fk_schedules_assignments`
-    FOREIGN KEY
-(
-    `assignment_id`
-)
-    REFERENCES `lms_db`.`course_assignments`
-(
-    `id`
-))
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8mb4
-    COLLATE = utf8mb4_unicode_520_ci;
+CREATE TABLE IF NOT EXISTS `lms_db`.`schedules` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `classroom_id` INT NOT NULL,
+  `assignment_id` INT NOT NULL,
+  `day_of_week` ENUM('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun') NOT NULL,
+  `start_time` TIME NOT NULL,
+  `end_time` TIME NOT NULL,
+  `note` TEXT NULL DEFAULT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  INDEX `idx_sched_classroom` (`classroom_id` ASC) VISIBLE,
+  INDEX `fk_schedules_assignments_idx` (`assignment_id` ASC) VISIBLE,
+  CONSTRAINT `fk_schedules_classrooms`
+    FOREIGN KEY (`classroom_id`)
+    REFERENCES `lms_db`.`classrooms` (`id`),
+  CONSTRAINT `fk_schedules_assignments`
+    FOREIGN KEY (`assignment_id`)
+    REFERENCES `lms_db`.`course_assignments` (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_520_ci;
 
 
 -- -----------------------------------------------------
 -- Table `lms_db`.`registrations`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `lms_db`.`registrations`;
+DROP TABLE IF EXISTS `lms_db`.`registrations` ;
 
-CREATE TABLE IF NOT EXISTS `lms_db`.`registrations`
-(
-    `id`
-    INT
-    NOT
-    NULL
-    AUTO_INCREMENT,
-    `student_id`
-    INT
-    NOT
-    NULL,
-    `offering_id`
-    INT
-    NOT
-    NULL,
-    `status`
-    ENUM
-(
-    'registered',
-    'cancelled'
-) NOT NULL DEFAULT 'registered',
-    `cancelled_at` TIMESTAMP NULL DEFAULT NULL,
-    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY
-(
-    `id`
-),
-    INDEX `idx_reg_offering`
-(
-    `offering_id`
-    ASC
-) VISIBLE,
-    UNIQUE INDEX `student_offering_UNIQUE`
-(
-    `student_id`
-    ASC,
-    `offering_id`
-    ASC
-) VISIBLE,
-    CONSTRAINT `fk_regs_students`
-    FOREIGN KEY
-(
-    `student_id`
-)
-    REFERENCES `lms_db`.`students`
-(
-    `id`
-)
-                                                              ON DELETE RESTRICT
-                                                              ON UPDATE RESTRICT,
-    CONSTRAINT `fk_regs_offerings`
-    FOREIGN KEY
-(
-    `offering_id`
-)
-    REFERENCES `lms_db`.`course_offerings`
-(
-    `id`
-)
-                                                              ON DELETE CASCADE
-                                                              ON UPDATE CASCADE)
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8mb4
-    COLLATE = utf8mb4_unicode_520_ci;
+CREATE TABLE IF NOT EXISTS `lms_db`.`registrations` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `student_id` INT NOT NULL,
+  `offering_id` INT NOT NULL,
+  `status` ENUM('registered', 'cancelled') NOT NULL DEFAULT 'registered',
+  `cancelled_at` TIMESTAMP NULL DEFAULT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  INDEX `idx_reg_offering` (`offering_id` ASC) VISIBLE,
+  UNIQUE INDEX `student_offering_UNIQUE` (`student_id` ASC, `offering_id` ASC) VISIBLE,
+  CONSTRAINT `fk_regs_students`
+    FOREIGN KEY (`student_id`)
+    REFERENCES `lms_db`.`students` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT,
+  CONSTRAINT `fk_regs_offerings`
+    FOREIGN KEY (`offering_id`)
+    REFERENCES `lms_db`.`course_offerings` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_520_ci;
 
 
 -- -----------------------------------------------------
 -- Table `lms_db`.`tuition_fees`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `lms_db`.`tuition_fees`;
+DROP TABLE IF EXISTS `lms_db`.`tuition_fees` ;
 
-CREATE TABLE IF NOT EXISTS `lms_db`.`tuition_fees`
-(
-    `id`
-    INT
-    NOT
-    NULL
-    AUTO_INCREMENT,
-    `student_id`
-    INT
-    NOT
-    NULL,
-    `semester_id`
-    INT
-    NOT
-    NULL,
-    `amount_due`
-    DECIMAL
-(
-    12,
-    2
-) NOT NULL,
-    `amount_paid` DECIMAL
-(
-    12,
-    2
-) NOT NULL DEFAULT 0,
-    `due_date` DATE NOT NULL,
-    `paid_date` DATE NULL DEFAULT NULL,
-    `status` ENUM
-(
-    'unpaid',
-    'partial',
-    'paid'
-) NOT NULL DEFAULT 'unpaid',
-    `note` TEXT NULL DEFAULT NULL,
-    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY
-(
-    `id`
-),
-    INDEX `idx_tui_semester`
-(
-    `semester_id`
-    ASC
-) VISIBLE,
-    UNIQUE INDEX `student_semester_UNIQUE`
-(
-    `student_id`
-    ASC,
-    `semester_id`
-    ASC
-) VISIBLE,
-    CONSTRAINT `fk_tui_students`
-    FOREIGN KEY
-(
-    `student_id`
-)
-    REFERENCES `lms_db`.`students`
-(
-    `id`
-),
-    CONSTRAINT `fk_tui_semesters`
-    FOREIGN KEY
-(
-    `semester_id`
-)
-    REFERENCES `lms_db`.`semesters`
-(
-    `id`
-))
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8mb4
-    COLLATE = utf8mb4_unicode_520_ci;
+CREATE TABLE IF NOT EXISTS `lms_db`.`tuition_fees` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `student_id` INT NOT NULL,
+  `semester_id` INT NOT NULL,
+  `amount_due` DECIMAL(12,2) NOT NULL,
+  `amount_paid` DECIMAL(12,2) NOT NULL DEFAULT 0,
+  `due_date` DATE NOT NULL,
+  `paid_date` DATE NULL DEFAULT NULL,
+  `status` ENUM('unpaid', 'partial', 'paid') NOT NULL DEFAULT 'unpaid',
+  `note` TEXT NULL DEFAULT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  INDEX `idx_tui_semester` (`semester_id` ASC) VISIBLE,
+  UNIQUE INDEX `student_semester_UNIQUE` (`student_id` ASC, `semester_id` ASC) VISIBLE,
+  CONSTRAINT `fk_tui_students`
+    FOREIGN KEY (`student_id`)
+    REFERENCES `lms_db`.`students` (`id`),
+  CONSTRAINT `fk_tui_semesters`
+    FOREIGN KEY (`semester_id`)
+    REFERENCES `lms_db`.`semesters` (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_520_ci;
 
 
 -- -----------------------------------------------------
 -- Table `lms_db`.`notices`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `lms_db`.`notices`;
+DROP TABLE IF EXISTS `lms_db`.`notices` ;
 
-CREATE TABLE IF NOT EXISTS `lms_db`.`notices`
-(
-    `id`
-    INT
-    NOT
-    NULL
-    AUTO_INCREMENT,
-    `title`
-    VARCHAR
-(
-    200
-) NOT NULL,
-    `content` TEXT NOT NULL,
-    `created_by` INT NOT NULL,
-    `audience` ENUM
-(
-    'all_students',
-    'all_teachers',
-    'all',
-    'department',
-    'specific'
-) NOT NULL DEFAULT 'all',
-    `target_id` INT NULL DEFAULT NULL,
-    `valid_from` DATE NULL DEFAULT NULL,
-    `valid_to` DATE NULL DEFAULT NULL,
-    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY
-(
-    `id`
-),
-    INDEX `idx_notices_creator`
-(
-    `created_by`
-    ASC
-) VISIBLE,
-    CONSTRAINT `fk_notices_users`
-    FOREIGN KEY
-(
-    `created_by`
-)
-    REFERENCES `lms_db`.`users`
-(
-    `id`
-))
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8mb4
-    COLLATE = utf8mb4_unicode_520_ci;
+CREATE TABLE IF NOT EXISTS `lms_db`.`notices` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `title` VARCHAR(200) NOT NULL,
+  `content` TEXT NOT NULL,
+  `created_by` INT NOT NULL,
+  `audience` ENUM('all_students', 'all_teachers', 'all', 'department', 'specific') NOT NULL DEFAULT 'all',
+  `target_id` INT NULL DEFAULT NULL,
+  `valid_from` DATE NULL DEFAULT NULL,
+  `valid_to` DATE NULL DEFAULT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  INDEX `idx_notices_creator` (`created_by` ASC) VISIBLE,
+  CONSTRAINT `fk_notices_users`
+    FOREIGN KEY (`created_by`)
+    REFERENCES `lms_db`.`users` (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_520_ci;
 
 
 -- -----------------------------------------------------
 -- Table `lms_db`.`course_documents`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `lms_db`.`course_documents`;
+DROP TABLE IF EXISTS `lms_db`.`course_documents` ;
 
-CREATE TABLE IF NOT EXISTS `lms_db`.`course_documents`
-(
-    `id`
-    INT
-    NOT
-    NULL
-    AUTO_INCREMENT,
-    `offering_id`
-    INT
-    NOT
-    NULL,
-    `title`
-    VARCHAR
-(
-    200
-) NOT NULL,
-    `file_url` VARCHAR
-(
-    500
-) NOT NULL,
-    `uploaded_by` INT NOT NULL,
-    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY
-(
-    `id`
-),
-    INDEX `idx_docs_offering`
-(
-    `offering_id`
-    ASC
-) VISIBLE,
-    INDEX `idx_docs_uploader`
-(
-    `uploaded_by`
-    ASC
-) VISIBLE,
-    CONSTRAINT `fk_docs_offerings`
-    FOREIGN KEY
-(
-    `offering_id`
-)
-    REFERENCES `lms_db`.`course_offerings`
-(
-    `id`
-)
-                                                              ON DELETE CASCADE
-                                                              ON UPDATE CASCADE,
-    CONSTRAINT `fk_docs_users`
-    FOREIGN KEY
-(
-    `uploaded_by`
-)
-    REFERENCES `lms_db`.`users`
-(
-    `id`
-))
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8mb4
-    COLLATE = utf8mb4_unicode_520_ci;
+CREATE TABLE IF NOT EXISTS `lms_db`.`course_documents` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `offering_id` INT NOT NULL,
+  `title` VARCHAR(200) NOT NULL,
+  `file_url` VARCHAR(500) NOT NULL,
+  `uploaded_by` INT NOT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  INDEX `idx_docs_offering` (`offering_id` ASC) VISIBLE,
+  INDEX `idx_docs_uploader` (`uploaded_by` ASC) VISIBLE,
+  CONSTRAINT `fk_docs_offerings`
+    FOREIGN KEY (`offering_id`)
+    REFERENCES `lms_db`.`course_offerings` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_docs_users`
+    FOREIGN KEY (`uploaded_by`)
+    REFERENCES `lms_db`.`users` (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_520_ci;
 
 
 -- -----------------------------------------------------
 -- Table `lms_db`.`grades`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `lms_db`.`grades`;
+DROP TABLE IF EXISTS `lms_db`.`grades` ;
 
-CREATE TABLE IF NOT EXISTS `lms_db`.`grades`
-(
-    `id`
-    INT
-    NOT
-    NULL
-    AUTO_INCREMENT,
-    `registration_id`
-    INT
-    NOT
-    NULL,
-    `entered_by`
-    INT
-    NOT
-    NULL,
-    `process_score`
-    DECIMAL
-(
-    5,
-    2
-) UNSIGNED NULL DEFAULT 0,
-    `midterm_score` DECIMAL
-(
-    5,
-    2
-) UNSIGNED NULL DEFAULT 0,
-    `final_score` DECIMAL
-(
-    5,
-    2
-) UNSIGNED NULL DEFAULT 0,
-    `process_weight` DECIMAL
-(
-    5,
-    2
-) UNSIGNED NOT NULL DEFAULT 10,
-    `midterm_weight` DECIMAL
-(
-    5,
-    2
-) UNSIGNED NOT NULL DEFAULT 30,
-    `final_weight` DECIMAL
-(
-    5,
-    2
-) UNSIGNED NOT NULL DEFAULT 60,
-    `total_score` DECIMAL
-(
-    5,
-    2
-) UNSIGNED NULL,
-    `letter_grade` VARCHAR
-(
-    2
-) NULL,
-    `status` ENUM
-(
-    'pass',
-    'fail'
-) NULL,
-    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY
-(
-    `id`
-),
-    UNIQUE INDEX `registration_UNIQUE`
-(
-    `registration_id`
-    ASC
-) VISIBLE,
-    INDEX `idx_grades_entered`
-(
-    `entered_by`
-    ASC
-) VISIBLE,
-    CONSTRAINT `fk_grades_regs`
-    FOREIGN KEY
-(
-    `registration_id`
-)
-    REFERENCES `lms_db`.`registrations`
-(
-    `id`
-)
-                                                              ON DELETE CASCADE
-                                                              ON UPDATE CASCADE,
-    CONSTRAINT `fk_grades_employees`
-    FOREIGN KEY
-(
-    `entered_by`
-)
-    REFERENCES `lms_db`.`employees`
-(
-    `id`
-))
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8mb4
-    COLLATE = utf8mb4_unicode_520_ci;
+CREATE TABLE IF NOT EXISTS `lms_db`.`grades` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `registration_id` INT NOT NULL,
+  `entered_by` INT NOT NULL,
+  `process_score` DECIMAL(5,2) UNSIGNED NULL DEFAULT 0,
+  `midterm_score` DECIMAL(5,2) UNSIGNED NULL DEFAULT 0,
+  `final_score` DECIMAL(5,2) UNSIGNED NULL DEFAULT 0,
+  `process_weight` DECIMAL(5,2) UNSIGNED NOT NULL DEFAULT 10,
+  `midterm_weight` DECIMAL(5,2) UNSIGNED NOT NULL DEFAULT 30,
+  `final_weight` DECIMAL(5,2) UNSIGNED NOT NULL DEFAULT 60,
+  `total_score` DECIMAL(5,2) UNSIGNED NULL,
+  `letter_grade` VARCHAR(2) NULL,
+  `status` ENUM('pass', 'fail') NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `registration_UNIQUE` (`registration_id` ASC) VISIBLE,
+  INDEX `idx_grades_entered` (`entered_by` ASC) VISIBLE,
+  CONSTRAINT `fk_grades_regs`
+    FOREIGN KEY (`registration_id`)
+    REFERENCES `lms_db`.`registrations` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_grades_employees`
+    FOREIGN KEY (`entered_by`)
+    REFERENCES `lms_db`.`employees` (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_520_ci;
 
 
 -- -----------------------------------------------------
 -- Table `lms_db`.`course_assignment_changes`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `lms_db`.`course_assignment_changes`;
+DROP TABLE IF EXISTS `lms_db`.`course_assignment_changes` ;
 
-CREATE TABLE IF NOT EXISTS `lms_db`.`course_assignment_changes`
-(
-    `id`
-    INT
-    NOT
-    NULL
-    AUTO_INCREMENT,
-    `assignment_id`
-    INT
-    NOT
-    NULL,
-    `old_schedule`
-    TEXT
-    NOT
-    NULL,
-    `new_schedule`
-    TEXT
-    NOT
-    NULL,
-    `changed_by`
-    INT
-    NOT
-    NULL,
-    `note`
-    TEXT
-    NULL
-    DEFAULT
-    NULL,
-    `created_at`
-    TIMESTAMP
-    NOT
-    NULL
-    DEFAULT
-    CURRENT_TIMESTAMP,
-    `updated_at`
-    TIMESTAMP
-    NOT
-    NULL
-    DEFAULT
-    CURRENT_TIMESTAMP
-    ON
-    UPDATE
-    CURRENT_TIMESTAMP,
-    PRIMARY
-    KEY
-(
-    `id`
-),
-    INDEX `idx_changes_assign`
-(
-    `assignment_id`
-    ASC
-) VISIBLE,
-    INDEX `idx_course_assignment_changes_changed_by`
-(
-    `changed_by`
-    ASC
-) VISIBLE,
-    CONSTRAINT `fk_changes_assign`
-    FOREIGN KEY
-(
-    `assignment_id`
-)
-    REFERENCES `lms_db`.`course_assignments`
-(
-    `id`
-)
+CREATE TABLE IF NOT EXISTS `lms_db`.`course_assignment_changes` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `assignment_id` INT NOT NULL,
+  `old_schedule` TEXT NOT NULL,
+  `new_schedule` TEXT NOT NULL,
+  `changed_by` INT NOT NULL,
+  `note` TEXT NULL DEFAULT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  INDEX `idx_changes_assign` (`assignment_id` ASC) VISIBLE,
+  INDEX `idx_course_assignment_changes_changed_by` (`changed_by` ASC) VISIBLE,
+  CONSTRAINT `fk_changes_assign`
+    FOREIGN KEY (`assignment_id`)
+    REFERENCES `lms_db`.`course_assignments` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-    CONSTRAINT `fk_changes_academic_staffs`
-    FOREIGN KEY
-(
-    `changed_by`
-)
-    REFERENCES `lms_db`.`employees`
-(
-    `id`
-))
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8mb4
-    COLLATE = utf8mb4_unicode_520_ci;
+  CONSTRAINT `fk_changes_academic_staffs`
+    FOREIGN KEY (`changed_by`)
+    REFERENCES `lms_db`.`employees` (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_520_ci;
 
 
 -- -----------------------------------------------------
 -- Table `lms_db`.`department_heads`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `lms_db`.`department_heads`;
+DROP TABLE IF EXISTS `lms_db`.`department_heads` ;
 
-CREATE TABLE IF NOT EXISTS `lms_db`.`department_heads`
-(
-    `id`
-    INT
-    NOT
-    NULL
-    AUTO_INCREMENT,
-    `teacher_id`
-    INT
-    NOT
-    NULL,
-    `department_id`
-    INT
-    NOT
-    NULL,
-    `start_date`
-    DATE
-    NOT
-    NULL,
-    `end_date`
-    DATE
-    NULL
-    DEFAULT
-    NULL,
-    `note`
-    TEXT
-    NULL
-    DEFAULT
-    NULL,
-    `created_at`
-    TIMESTAMP
-    NOT
-    NULL
-    DEFAULT
-    CURRENT_TIMESTAMP,
-    `updated_at`
-    TIMESTAMP
-    NOT
-    NULL
-    DEFAULT
-    CURRENT_TIMESTAMP
-    ON
-    UPDATE
-    CURRENT_TIMESTAMP,
-    PRIMARY
-    KEY
-(
-    `id`
-),
-    INDEX `fk_heads_teacher_idx`
-(
-    `teacher_id`
-    ASC
-) VISIBLE,
-    INDEX `fk_heads_department_idx`
-(
-    `department_id`
-    ASC
-) VISIBLE,
-    UNIQUE INDEX `uq_active_head`
-(
-    `department_id`
-    ASC,
-    `start_date`
-    ASC
-) VISIBLE,
-    CONSTRAINT `fk_heads_teacher`
-    FOREIGN KEY
-(
-    `teacher_id`
-)
-    REFERENCES `lms_db`.`teachers`
-(
-    `id`
-)
+CREATE TABLE IF NOT EXISTS `lms_db`.`department_heads` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `teacher_id` INT NOT NULL,
+  `department_id` INT NOT NULL,
+  `start_date` DATE NOT NULL,
+  `end_date` DATE NULL DEFAULT NULL,
+  `note` TEXT NULL DEFAULT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  INDEX `fk_heads_teacher_idx` (`teacher_id` ASC) VISIBLE,
+  INDEX `fk_heads_department_idx` (`department_id` ASC) VISIBLE,
+  UNIQUE INDEX `uq_active_head` (`department_id` ASC, `start_date` ASC) VISIBLE,
+  CONSTRAINT `fk_heads_teacher`
+    FOREIGN KEY (`teacher_id`)
+    REFERENCES `lms_db`.`teachers` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-    CONSTRAINT `fk_heads_department`
-    FOREIGN KEY
-(
-    `department_id`
-)
-    REFERENCES `lms_db`.`departments`
-(
-    `id`
-)
+  CONSTRAINT `fk_heads_department`
+    FOREIGN KEY (`department_id`)
+    REFERENCES `lms_db`.`departments` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-    ENGINE = InnoDB;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
 -- Table `lms_db`.`teacher_majors`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `lms_db`.`teacher_majors`;
+DROP TABLE IF EXISTS `lms_db`.`teacher_majors` ;
 
-CREATE TABLE IF NOT EXISTS `lms_db`.`teacher_majors`
-(
-    `teacher_id`
-    INT
-    NOT
-    NULL,
-    `major_id`
-    INT
-    NOT
-    NULL,
-    `is_primary`
-    TINYINT
-(
-    1
-) NOT NULL DEFAULT 0,
-    `note` TEXT NULL DEFAULT NULL,
-    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY
-(
-    `teacher_id`,
-    `major_id`
-),
-    INDEX `fk_tm_majors_idx`
-(
-    `major_id`
-    ASC
-) VISIBLE,
-    INDEX `fk_tm_teacher_idx`
-(
-    `teacher_id`
-    ASC
-) VISIBLE,
-    CONSTRAINT `fk_tm_teachers`
-    FOREIGN KEY
-(
-    `teacher_id`
-)
-    REFERENCES `lms_db`.`teachers`
-(
-    `id`
-)
-                                                              ON DELETE CASCADE
-                                                              ON UPDATE CASCADE,
-    CONSTRAINT `fk_tm_majors`
-    FOREIGN KEY
-(
-    `major_id`
-)
-    REFERENCES `lms_db`.`majors`
-(
-    `id`
-)
-                                                              ON DELETE CASCADE
-                                                              ON UPDATE CASCADE)
-    ENGINE = InnoDB;
+CREATE TABLE IF NOT EXISTS `lms_db`.`teacher_majors` (
+  `teacher_id` INT NOT NULL,
+  `major_id` INT NOT NULL,
+  `is_primary` TINYINT(1) NOT NULL DEFAULT 0,
+  `note` TEXT NULL DEFAULT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`teacher_id`, `major_id`),
+  INDEX `fk_tm_majors_idx` (`major_id` ASC) VISIBLE,
+  INDEX `fk_tm_teacher_idx` (`teacher_id` ASC) VISIBLE,
+  CONSTRAINT `fk_tm_teachers`
+    FOREIGN KEY (`teacher_id`)
+    REFERENCES `lms_db`.`teachers` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_tm_majors`
+    FOREIGN KEY (`major_id`)
+    REFERENCES `lms_db`.`majors` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
 -- Table `lms_db`.`exam_schedules`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `lms_db`.`exam_schedules`;
+DROP TABLE IF EXISTS `lms_db`.`exam_schedules` ;
 
-CREATE TABLE IF NOT EXISTS `lms_db`.`exam_schedules`
-(
-    `id`
-    INT
-    NOT
-    NULL
-    AUTO_INCREMENT,
-    `offering_id`
-    INT
-    NOT
-    NULL,
-    `classroom_id`
-    INT
-    NOT
-    NULL,
-    `exam_date`
-    DATE
-    NOT
-    NULL,
-    `start_time`
-    TIME
-    NOT
-    NULL,
-    `note`
-    TEXT
-    NULL,
-    `created_at`
-    TIMESTAMP
-    NOT
-    NULL
-    DEFAULT
-    CURRENT_TIMESTAMP,
-    `updated_at`
-    TIMESTAMP
-    NOT
-    NULL
-    DEFAULT
-    CURRENT_TIMESTAMP
-    ON
-    UPDATE
-    CURRENT_TIMESTAMP,
-    PRIMARY
-    KEY
-(
-    `id`
-),
-    UNIQUE INDEX `offering_id_UNIQUE`
-(
-    `offering_id`
-    ASC
-) VISIBLE,
-    INDEX `fk_exam_classrooms_idx`
-(
-    `classroom_id`
-    ASC
-) VISIBLE,
-    CONSTRAINT `fk_exam_offerings`
-    FOREIGN KEY
-(
-    `offering_id`
-)
-    REFERENCES `lms_db`.`course_offerings`
-(
-    `id`
-)
+CREATE TABLE IF NOT EXISTS `lms_db`.`exam_schedules` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `offering_id` INT NOT NULL,
+  `classroom_id` INT NOT NULL,
+  `exam_date` DATE NOT NULL,
+  `start_time` TIME NOT NULL,
+  `note` TEXT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `offering_id_UNIQUE` (`offering_id` ASC) VISIBLE,
+  INDEX `fk_exam_classrooms_idx` (`classroom_id` ASC) VISIBLE,
+  CONSTRAINT `fk_exam_offerings`
+    FOREIGN KEY (`offering_id`)
+    REFERENCES `lms_db`.`course_offerings` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-    CONSTRAINT `fk_exam_classrooms`
-    FOREIGN KEY
-(
-    `classroom_id`
-)
-    REFERENCES `lms_db`.`classrooms`
-(
-    `id`
-)
+  CONSTRAINT `fk_exam_classrooms`
+    FOREIGN KEY (`classroom_id`)
+    REFERENCES `lms_db`.`classrooms` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-    ENGINE = InnoDB;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
 -- Table `lms_db`.`office_heads`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `lms_db`.`office_heads`;
+DROP TABLE IF EXISTS `lms_db`.`office_heads` ;
 
-CREATE TABLE IF NOT EXISTS `lms_db`.`office_heads`
-(
-    `id`
-    INT
-    NOT
-    NULL
-    AUTO_INCREMENT,
-    `employee_id`
-    INT
-    NOT
-    NULL,
-    `office_id`
-    INT
-    NOT
-    NULL,
-    `start_date`
-    DATE
-    NOT
-    NULL,
-    `end_date`
-    DATE
-    NULL
-    DEFAULT
-    NULL,
-    `note`
-    TEXT
-    NULL
-    DEFAULT
-    NULL,
-    `created_at`
-    TIMESTAMP
-    NOT
-    NULL
-    DEFAULT
-    CURRENT_TIMESTAMP,
-    `updated_at`
-    TIMESTAMP
-    NOT
-    NULL
-    DEFAULT
-    CURRENT_TIMESTAMP
-    ON
-    UPDATE
-    CURRENT_TIMESTAMP,
-    PRIMARY
-    KEY
-(
-    `id`
-),
-    INDEX `fk_office_heads_employees_idx`
-(
-    `employee_id`
-    ASC
-) VISIBLE,
-    INDEX `fk_office_heads_offices_idx`
-(
-    `office_id`
-    ASC
-) VISIBLE,
-    UNIQUE INDEX `uq_active_head`
-(
-    `office_id`
-    ASC,
-    `start_date`
-    ASC
-) VISIBLE,
-    CONSTRAINT `fk_office_heads_employees`
-    FOREIGN KEY
-(
-    `employee_id`
-)
-    REFERENCES `lms_db`.`employees`
-(
-    `id`
-)
+CREATE TABLE IF NOT EXISTS `lms_db`.`office_heads` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `employee_id` INT NOT NULL,
+  `office_id` INT NOT NULL,
+  `start_date` DATE NOT NULL,
+  `end_date` DATE NULL DEFAULT NULL,
+  `note` TEXT NULL DEFAULT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  INDEX `fk_office_heads_employees_idx` (`employee_id` ASC) VISIBLE,
+  INDEX `fk_office_heads_offices_idx` (`office_id` ASC) VISIBLE,
+  UNIQUE INDEX `uq_active_head` (`office_id` ASC, `start_date` ASC) VISIBLE,
+  CONSTRAINT `fk_office_heads_employees`
+    FOREIGN KEY (`employee_id`)
+    REFERENCES `lms_db`.`employees` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-    CONSTRAINT `fk_office_heads_offices`
-    FOREIGN KEY
-(
-    `office_id`
-)
-    REFERENCES `lms_db`.`offices`
-(
-    `id`
-)
+  CONSTRAINT `fk_office_heads_offices`
+    FOREIGN KEY (`office_id`)
+    REFERENCES `lms_db`.`offices` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-    ENGINE = InnoDB;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
 -- Table `lms_db`.`conduct_scores`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `lms_db`.`conduct_scores`;
+DROP TABLE IF EXISTS `lms_db`.`conduct_scores` ;
 
-CREATE TABLE IF NOT EXISTS `lms_db`.`conduct_scores`
-(
-    `id`
-    INT
-    NOT
-    NULL
-    AUTO_INCREMENT,
-    `student_id`
-    INT
-    NOT
-    NULL,
-    `semester_id`
-    INT
-    NOT
-    NULL,
-    `score`
-    DECIMAL
-(
-    4,
-    2
-) NOT NULL,
-    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY
-(
-    `id`
-),
-    UNIQUE INDEX `student_semester_unique`
-(
-    `student_id`
-    ASC,
-    `semester_id`
-    ASC
-) INVISIBLE,
-    INDEX `fk_conduct_scores_semesters_idx`
-(
-    `semester_id`
-    ASC
-) INVISIBLE,
-    INDEX `fk_conduct_scores_students_idx`
-(
-    `student_id`
-    ASC
-) VISIBLE,
-    CONSTRAINT `fk_conduct_scores_students`
-    FOREIGN KEY
-(
-    `student_id`
-)
-    REFERENCES `lms_db`.`students`
-(
-    `id`
-)
-                                                              ON DELETE NO ACTION
-                                                              ON UPDATE NO ACTION,
-    CONSTRAINT `fk_conduct_scores_semesters`
-    FOREIGN KEY
-(
-    `semester_id`
-)
-    REFERENCES `lms_db`.`semesters`
-(
-    `id`
-)
-                                                              ON DELETE NO ACTION
-                                                              ON UPDATE NO ACTION)
-    ENGINE = InnoDB;
+CREATE TABLE IF NOT EXISTS `lms_db`.`conduct_scores` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `student_id` INT NOT NULL,
+  `semester_id` INT NOT NULL,
+  `score` DECIMAL(4,2) NOT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `student_semester_unique` (`student_id` ASC, `semester_id` ASC) INVISIBLE,
+  INDEX `fk_conduct_scores_semesters_idx` (`semester_id` ASC) INVISIBLE,
+  INDEX `fk_conduct_scores_students_idx` (`student_id` ASC) VISIBLE,
+  CONSTRAINT `fk_conduct_scores_students`
+    FOREIGN KEY (`student_id`)
+    REFERENCES `lms_db`.`students` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_conduct_scores_semesters`
+    FOREIGN KEY (`semester_id`)
+    REFERENCES `lms_db`.`semesters` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
 -- Table `lms_db`.`student_credits`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `lms_db`.`student_credits`;
+DROP TABLE IF EXISTS `lms_db`.`student_credits` ;
 
-CREATE TABLE IF NOT EXISTS `lms_db`.`student_credits`
-(
-    `id`
-    INT
-    NOT
-    NULL
-    AUTO_INCREMENT,
-    `student_id`
-    INT
-    NOT
-    NULL,
-    `semester_id`
-    INT
-    NOT
-    NULL,
-    `total_credits`
-    INT
-    NOT
-    NULL,
-    `passed_credits`
-    INT
-    NOT
-    NULL,
-    `created_at`
-    TIMESTAMP
-    NOT
-    NULL
-    DEFAULT
-    CURRENT_TIMESTAMP,
-    `updated_at`
-    TIMESTAMP
-    NOT
-    NULL
-    DEFAULT
-    CURRENT_TIMESTAMP
-    ON
-    UPDATE
-    CURRENT_TIMESTAMP,
-    PRIMARY
-    KEY
-(
-    `id`
-),
-    UNIQUE INDEX `student_semester_unique`
-(
-    `student_id`
-    ASC,
-    `semester_id`
-    ASC
-) INVISIBLE,
-    INDEX `fk_student_credits_semesters_idx`
-(
-    `semester_id`
-    ASC
-) VISIBLE,
-    INDEX `fk_student_credits_students_idx`
-(
-    `student_id`
-    ASC
-) VISIBLE,
-    CONSTRAINT `fk_student_credits_students`
-    FOREIGN KEY
-(
-    `student_id`
-)
-    REFERENCES `lms_db`.`students`
-(
-    `id`
-)
+CREATE TABLE IF NOT EXISTS `lms_db`.`student_credits` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `student_id` INT NOT NULL,
+  `semester_id` INT NOT NULL,
+  `total_credits` INT NOT NULL,
+  `passed_credits` INT NOT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `student_semester_unique` (`student_id` ASC, `semester_id` ASC) INVISIBLE,
+  INDEX `fk_student_credits_semesters_idx` (`semester_id` ASC) VISIBLE,
+  INDEX `fk_student_credits_students_idx` (`student_id` ASC) VISIBLE,
+  CONSTRAINT `fk_student_credits_students`
+    FOREIGN KEY (`student_id`)
+    REFERENCES `lms_db`.`students` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-    CONSTRAINT `fk_student_credits_semesters`
-    FOREIGN KEY
-(
-    `semester_id`
-)
-    REFERENCES `lms_db`.`semesters`
-(
-    `id`
-)
+  CONSTRAINT `fk_student_credits_semesters`
+    FOREIGN KEY (`semester_id`)
+    REFERENCES `lms_db`.`semesters` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-    ENGINE = InnoDB;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
 -- Table `lms_db`.`course_prerequisites`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `lms_db`.`course_prerequisites`;
+DROP TABLE IF EXISTS `lms_db`.`course_prerequisites` ;
 
-CREATE TABLE IF NOT EXISTS `lms_db`.`course_prerequisites`
-(
-    `subject_id`
-    INT
-    NOT
-    NULL,
-    `required_subject_id`
-    INT
-    NOT
-    NULL,
-    `created_at`
-    TIMESTAMP
-    NOT
-    NULL
-    DEFAULT
-    CURRENT_TIMESTAMP,
-    `updated_at`
-    TIMESTAMP
-    NOT
-    NULL
-    DEFAULT
-    CURRENT_TIMESTAMP
-    ON
-    UPDATE
-    CURRENT_TIMESTAMP,
-    PRIMARY
-    KEY
-(
-    `subject_id`,
-    `required_subject_id`
-),
-    INDEX `fk_prerequisites_required_subject_idx`
-(
-    `required_subject_id`
-    ASC
-) INVISIBLE,
-    CONSTRAINT `fk_prerequisites_subject`
-    FOREIGN KEY
-(
-    `subject_id`
-)
-    REFERENCES `lms_db`.`subjects`
-(
-    `id`
-)
+CREATE TABLE IF NOT EXISTS `lms_db`.`course_prerequisites` (
+  `subject_id` INT NOT NULL,
+  `required_subject_id` INT NOT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`subject_id`, `required_subject_id`),
+  INDEX `fk_prerequisites_required_subject_idx` (`required_subject_id` ASC) INVISIBLE,
+  CONSTRAINT `fk_prerequisites_subject`
+    FOREIGN KEY (`subject_id`)
+    REFERENCES `lms_db`.`subjects` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-    CONSTRAINT `fk_prerequisites_required_subject`
-    FOREIGN KEY
-(
-    `required_subject_id`
-)
-    REFERENCES `lms_db`.`subjects`
-(
-    `id`
-)
+  CONSTRAINT `fk_prerequisites_required_subject`
+    FOREIGN KEY (`required_subject_id`)
+    REFERENCES `lms_db`.`subjects` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-    ENGINE = InnoDB;
+ENGINE = InnoDB;
 
 
-SET
-SQL_MODE=@OLD_SQL_MODE;
-SET
-FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET
-UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
