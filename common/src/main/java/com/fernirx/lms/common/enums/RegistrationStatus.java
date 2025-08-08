@@ -10,7 +10,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public enum RegistrationStatus {
     REGISTERED("Registered"),
-    CANCELLED("Cancelled"),;
+    CANCELLED("Cancelled");
 
     @JsonValue
     private final String value;

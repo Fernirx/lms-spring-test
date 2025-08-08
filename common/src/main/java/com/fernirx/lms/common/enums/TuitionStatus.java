@@ -10,7 +10,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public enum TuitionStatus {
     UNPAID("Unpaid"),
-    Partial("Partial"),
+    PARTIAL("Partial"),
     PAID("Paid");
 
     @JsonValue

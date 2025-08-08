@@ -10,7 +10,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public enum GradeStatus {
     PASS("Pass"),
-    FAIL("Fail"),;
+    FAIL("Fail");
 
     @JsonValue
     private final String value;
