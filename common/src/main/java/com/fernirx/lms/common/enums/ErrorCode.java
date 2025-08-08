@@ -19,6 +19,7 @@ public enum ErrorCode {
     REQUIRED_FIELD("ERR_REQUIRED", "This field is required", ErrorCategory.VALIDATION),
     INVALID_EMAIL("ERR_INVALID_EMAIL", "Invalid email format", ErrorCategory.VALIDATION),
     VALUE_TOO_SHORT("ERR_TOO_SHORT", "Value too short", ErrorCategory.VALIDATION),
+    INVALID_PHONE("ERR_INVALID_PHONE", "Invalid phone number", ErrorCategory.VALIDATION),
 
     // Auth
     INVALID_CREDENTIALS("AUTH_INVALID_CREDENTIALS", "Invalid credentials", ErrorCategory.AUTHENTICATION),
