@@ -4,6 +4,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
+import java.util.Arrays;
+import java.util.Optional;
+
 @Getter
 @RequiredArgsConstructor
 public enum ErrorCode {
@@ -66,4 +69,11 @@ public enum ErrorCode {
     public int getPriority() {
         return category.getPriority();
     }
+
+    public static Optional<ErrorCode> fromCode(String code) {
+        return Arrays.stream(values())
+                .filter(e -> e.getCode().equals(code))
+                .findFirst();
+    }
+
 }
