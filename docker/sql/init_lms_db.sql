@@ -19,13 +19,32 @@ CREATE SCHEMA IF NOT EXISTS `lms_db` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8m
 USE `lms_db` ;
 
 -- -----------------------------------------------------
+-- Table `lms_db`.`institutions`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `lms_db`.`institutions` ;
+
+CREATE TABLE IF NOT EXISTS `lms_db`.`institutions` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `code` VARCHAR(6) NOT NULL,
+    `short_name` VARCHAR(20) NOT NULL,
+    `full_name` VARCHAR(200) NOT NULL,
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    UNIQUE INDEX `code_UNIQUE` (`code` ASC) VISIBLE
+)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_520_ci;
+
+-- -----------------------------------------------------
 -- Table `lms_db`.`roles`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `lms_db`.`roles` ;
 
 CREATE TABLE IF NOT EXISTS `lms_db`.`roles` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(50) NOT NULL COMMENT 'Student, Teacher, dept_head, acad_affairs',
+  `name` VARCHAR(100) NOT NULL COMMENT 'Student, Teacher, dept_head, acad_affairs',
   `description` TEXT NULL DEFAULT NULL,
   `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -67,7 +86,7 @@ DROP TABLE IF EXISTS `lms_db`.`departments` ;
 
 CREATE TABLE IF NOT EXISTS `lms_db`.`departments` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `code` VARCHAR(10) NOT NULL,
+  `code` VARCHAR(6) NOT NULL,
   `name` VARCHAR(100) NOT NULL,
   `description` TEXT NULL DEFAULT NULL,
   `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -86,7 +105,7 @@ DROP TABLE IF EXISTS `lms_db`.`majors` ;
 CREATE TABLE IF NOT EXISTS `lms_db`.`majors` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `department_id` INT NOT NULL,
-  `code` VARCHAR(10) NOT NULL,
+  `code` VARCHAR(8) NOT NULL,
   `name` VARCHAR(100) NOT NULL,
   `degree_level` ENUM('Bachelor', 'Engineer', 'Phd') NOT NULL DEFAULT 'Bachelor',
   `description` TEXT NULL DEFAULT NULL,
@@ -116,7 +135,7 @@ CREATE TABLE IF NOT EXISTS `lms_db`.`teachers` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `user_id` INT NOT NULL,
   `department_id` INT NOT NULL,
-  `code` VARCHAR(10) NOT NULL,
+  `code` VARCHAR(8) NOT NULL,
   `first_name` VARCHAR(100) NOT NULL,
   `last_name` VARCHAR(100) NOT NULL,
   `gender` ENUM('Male', 'Female', 'Other') NULL DEFAULT NULL,
@@ -157,7 +176,7 @@ CREATE TABLE IF NOT EXISTS `lms_db`.`classes` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `teacher_id` INT NOT NULL,
   `major_id` INT NOT NULL,
-  `code` VARCHAR(10) NOT NULL,
+  `code` VARCHAR(8) NOT NULL,
   `name` VARCHAR(100) NOT NULL,
   `cohort_year` YEAR NOT NULL,
   `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
@@ -188,7 +207,7 @@ CREATE TABLE IF NOT EXISTS `lms_db`.`students` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `user_id` INT NOT NULL,
   `class_id` INT NOT NULL,
-  `code` VARCHAR(10) NOT NULL,
+  `code` VARCHAR(12) NOT NULL,
   `first_name` VARCHAR(100) NOT NULL,
   `last_name` VARCHAR(100) NOT NULL,
   `gender` ENUM('Male', 'Female', 'Other') NULL DEFAULT NULL,
@@ -227,7 +246,7 @@ DROP TABLE IF EXISTS `lms_db`.`offices` ;
 
 CREATE TABLE IF NOT EXISTS `lms_db`.`offices` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `code` VARCHAR(10) NOT NULL,
+  `code` VARCHAR(6) NOT NULL,
   `name` VARCHAR(100) NOT NULL,
   `description` TEXT NULL,
   `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -246,7 +265,7 @@ CREATE TABLE IF NOT EXISTS `lms_db`.`employees` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `user_id` INT NOT NULL,
   `office_id` INT NOT NULL,
-  `code` VARCHAR(10) NOT NULL,
+  `code` VARCHAR(8) NOT NULL,
   `first_name` VARCHAR(100) NOT NULL,
   `last_name` VARCHAR(100) NOT NULL,
   `gender` ENUM('Male', 'Female', 'Other') NULL DEFAULT NULL,
@@ -284,8 +303,8 @@ DROP TABLE IF EXISTS `lms_db`.`school_years` ;
 
 CREATE TABLE IF NOT EXISTS `lms_db`.`school_years` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `code` VARCHAR(10) NOT NULL,
-  `name` VARCHAR(50) NOT NULL,
+  `code` VARCHAR(9) NOT NULL,
+  `name` VARCHAR(100) NOT NULL,
   `start_year` YEAR(4) NOT NULL,
   `end_year` YEAR(4) NOT NULL,
   `is_current` TINYINT(1) NOT NULL DEFAULT 0,
@@ -308,8 +327,8 @@ DROP TABLE IF EXISTS `lms_db`.`semesters` ;
 CREATE TABLE IF NOT EXISTS `lms_db`.`semesters` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `school_year_id` INT NOT NULL,
-  `code` VARCHAR(10) NOT NULL,
-  `name` VARCHAR(50) NOT NULL,
+  `code` VARCHAR(6) NOT NULL,
+  `name` VARCHAR(100) NOT NULL,
   `start_date` DATE NOT NULL,
   `end_date` DATE NOT NULL,
   `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -337,8 +356,8 @@ DROP TABLE IF EXISTS `lms_db`.`subjects` ;
 CREATE TABLE IF NOT EXISTS `lms_db`.`subjects` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `major_id` INT NOT NULL,
-  `code` VARCHAR(10) NOT NULL,
-  `name` VARCHAR(50) NOT NULL,
+  `code` VARCHAR(8) NOT NULL,
+  `name` VARCHAR(100) NOT NULL,
   `type` ENUM('Theory', 'Practical') NOT NULL DEFAULT 'Theory',
   `academic_credits` INT UNSIGNED NOT NULL,
   `billing_credits` INT UNSIGNED NOT NULL,
@@ -398,7 +417,7 @@ DROP TABLE IF EXISTS `lms_db`.`classrooms` ;
 
 CREATE TABLE IF NOT EXISTS `lms_db`.`classrooms` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `code` VARCHAR(10) NOT NULL,
+  `code` VARCHAR(8) NOT NULL,
   `location` VARCHAR(100) NOT NULL,
   `capacity` INT NOT NULL,
   `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -567,7 +586,7 @@ CREATE TABLE IF NOT EXISTS `lms_db`.`course_documents` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `offering_id` INT NOT NULL,
   `title` VARCHAR(200) NOT NULL,
-  `file_url` VARCHAR(500) NOT NULL,
+  `file_url` VARCHAR(255) NOT NULL,
   `uploaded_by` INT NOT NULL,
   `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
