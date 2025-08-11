@@ -1,6 +1,8 @@
 # LMS Spring
 
-**LMS Spring** is a robust, modular RESTful API for university academic management, built with Spring Boot. It provides a solid foundation for managing courses, students, grades, roles, and other operations, ready for integration with UIs or other services.
+**LMS Spring** is a robust, modular RESTful API for university academic management, built with Spring Boot. It provides
+a solid foundation for managing courses, students, grades, roles, and other operations, ready for integration with UIs
+or other services.
 
 ---
 
@@ -20,7 +22,8 @@
 
 ## Introduction
 
-**LMS Spring** is a scalable, multi-module REST API designed for comprehensive academic management at universities. It emphasizes:
+**LMS Spring** is a scalable, multi-module REST API designed for comprehensive academic management at universities. It
+emphasizes:
 
 * **Modularity**: clear separation of concerns across common, core, auth, service, and API modules
 * **Flexibility**: profile-based configuration for development, staging, and production
@@ -33,7 +36,8 @@ Use this project as a foundation to rapidly build and customize academic managem
 
 ## Key Features
 
-* **Multi‑module architecture**: separate modules for common utilities, core configs, auth, user, academic, finance, reporting, gateway, admin, etc.
+* **Multi‑module architecture**: separate modules for common utilities, core configs, auth, user, academic, finance,
+  reporting, gateway, admin, etc.
 * **Profile‑based configuration**: support for `application.yaml` + `application-{profile}.yaml` patterns
 * **Spring Security & JWT**: fine‑grained RBAC and token‑based authentication
 * **Bean Validation**: ensure data integrity at the API layer
