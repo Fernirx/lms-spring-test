@@ -45,6 +45,13 @@ server:
   servlet:
     context-path: /api/your-project-name
 
+# === JWT Configuration ===
+jwt:
+  secret: your_base64_encoded_secret_at_least_512_bits  # Base64 encoded
+  expiration: 86400000  # 24 hours
+  refresh-expiration: 604800000  # 7 days
+  issuer: LMS
+
 # === Swagger/OpenAPI Configuration (for dev/docs) ===
 springdoc:
   api-docs:
