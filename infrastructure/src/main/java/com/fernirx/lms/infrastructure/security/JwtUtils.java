@@ -9,57 +9,32 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
-import java.util.Base64;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Component
-public class JwtTokenUtils {
+public class JwtUtils {
 
     private final JwtProperties jwtProperties;
     private SecretKey key;
 
-    public JwtTokenUtils(JwtProperties jwtProperties) {
+    public JwtUtils(JwtProperties jwtProperties) {
         this.jwtProperties = jwtProperties;
     }
 
     @PostConstruct
     public void init() {
-        validateJwtSecret();
-
-        key = Keys.hmacShaKeyFor(
+        this.key = Keys.hmacShaKeyFor(
                 Decoders.BASE64.decode(
                         jwtProperties.getSecret()
                 )
         );
     }
 
-    private void validateJwtSecret() {
-        String secret = jwtProperties.getSecret();
-        if (secret == null || secret.trim().isEmpty())
-            throw new IllegalStateException("JWT secret is not configured!");
-
-        try {
-            Decoders.BASE64.decode(secret);
-        }  catch (Exception e) {
-            log.warn("JWT secret is not base64 encoded. Encoding it now...");
-            String encoded = Base64.getEncoder()
-                    .encodeToString(secret.getBytes());
-            jwtProperties.setSecret(encoded);
-        }
-    }
-
     public String generateAccessToken(Authentication authentication) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        Map<String, Object> claims = createAccessClaims(userDetails);
-
-        return createToken(claims, userDetails.getUsername(), jwtProperties.getExpiration());
-    }
-
-    public String generateAccessToken(CustomUserDetails userDetails) {
-        Map<String, Object> claims = createAccessClaims(userDetails);
+        Map<String, Object> claims = createClaims(userDetails);
+        claims.put("type", "access_token");
 
         return createToken(claims, userDetails.getUsername(), jwtProperties.getExpiration());
     }
@@ -72,9 +47,8 @@ public class JwtTokenUtils {
         return createToken(claims, username, jwtProperties.getRefreshExpiration());
     }
 
-    private Map<String, Object> createAccessClaims(CustomUserDetails userDetails) {
+    private Map<String, Object> createClaims(CustomUserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("type", "access_token");
         claims.put("username", userDetails.getUsername());
         claims.put("authorities", SecurityUtils.getAuthorities(userDetails));
         return claims;
@@ -95,25 +69,30 @@ public class JwtTokenUtils {
     }
 
     public boolean validateAccessToken(String token) {
+        return validateToken(token, "access_token");
+    }
+
+    public boolean validateRefreshToken(String token) {
+        return validateToken(token, "refresh_token");
+    }
+
+    public boolean validateToken(String token, String expectedType) {
         try {
             Claims claims = extractAllClaims(token);
-            String type = claims.get("type").toString();
+            String tokenType = claims.get("type").toString();
 
-            if (!type.equals("access_token")){
-                log.error("Invalid token type. Expected access_token but got {}", type);
-                return false;
+            if (!expectedType.equals(tokenType)) {
+                log.error("Invalid token type. Expected {} but got {}", expectedType, tokenType);
+                throw new IllegalArgumentException("Invalid JWT token type");
             }
 
             return true;
-
-        } catch (SecurityException | MalformedJwtException e) {
-            log.error("Invalid JWT signature: {}", e.getMessage());
-        } catch (ExpiredJwtException e) {
-            log.error("JWT token is expired: {}", e.getMessage());
-        } catch (UnsupportedJwtException e) {
-            log.error("JWT token is unsupported: {}", e.getMessage());
-        } catch (IllegalArgumentException e) {
-            log.error("JWT claims string is empty: {}", e.getMessage());
+        } catch (ExpiredJwtException | MalformedJwtException | UnsupportedJwtException |
+                 SecurityException | IllegalArgumentException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("Unexpected JWT validation error", e);
+            throw new IllegalArgumentException("JWT validation failed", e);
         }
     }
 
@@ -123,5 +102,32 @@ public class JwtTokenUtils {
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
+    }
+
+    public String extractSubject(String token) {
+        return extractAllClaims(token).getSubject();
+    }
+
+    public String extractUsername(String token) {
+        return extractAllClaims(token).get("username").toString();
+    }
+
+    public List<String> getAuthoritiesFromToken(String token) {
+        Object authorities = extractAllClaims(token).get("authorities");
+        if (authorities instanceof List<?>) {
+            return ((List<?>) authorities).stream()
+                    .map(Object::toString)
+                    .toList();
+        }
+        return List.of();
+    }
+
+    public boolean isTokenExpired(String token) {
+        try {
+            Date expiration = extractAllClaims(token).getExpiration();
+            return expiration.before(new Date());
+        } catch (ExpiredJwtException e) {
+            return true;
+        }
     }
 }
