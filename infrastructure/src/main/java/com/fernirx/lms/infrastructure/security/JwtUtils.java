@@ -6,6 +6,7 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -47,6 +48,24 @@ public class JwtUtils {
         return createToken(claims, username, jwtProperties.getRefreshExpiration());
     }
 
+    public String refreshAccessToken(String accessToken, String refreshToken) {
+        validateRefreshToken(refreshToken);
+        validateAccessToken(accessToken);
+        String username = extractUsername(refreshToken);
+        List<String> authorities = extractAuthorities(accessToken);
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("type", "access_token");
+        claims.put("username", username);
+        claims.put("authorities", authorities);
+        return createToken(claims, username, jwtProperties.getExpiration());
+    }
+
+    public String rotateRefreshToken(String oldRefreshToken) {
+        validateRefreshToken(oldRefreshToken);
+        String username = extractUsername(oldRefreshToken);
+        return generateRefreshToken(username);
+    }
+
     private Map<String, Object> createClaims(CustomUserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("username", userDetails.getUsername());
@@ -54,9 +73,9 @@ public class JwtUtils {
         return claims;
     }
 
-    private String createToken(Map<String,Object> claims, String subject, long expiration) {
+    private String createToken(Map<String,Object> claims, String subject, long expirationMillis) {
         Date now = new Date();
-        Date expirationDate = new Date(expiration);
+        Date expirationDate = new Date(now.getTime() + expirationMillis);
 
         return Jwts.builder()
                 .claims(claims)
@@ -112,7 +131,7 @@ public class JwtUtils {
         return extractAllClaims(token).get("username").toString();
     }
 
-    public List<String> getAuthoritiesFromToken(String token) {
+    public List<String> extractAuthorities(String token) {
         Object authorities = extractAllClaims(token).get("authorities");
         if (authorities instanceof List<?>) {
             return ((List<?>) authorities).stream()
