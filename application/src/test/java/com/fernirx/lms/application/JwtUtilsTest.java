@@ -53,7 +53,7 @@ public class JwtUtilsTest {
 
     @Test
     void testGenerateAndValidateRefreshToken() {
-        String refreshToken = jwtUtils.generateRefreshToken("user");
+        String refreshToken = jwtUtils.generateRefreshToken(1, "user");
         System.out.println("Refresh Token: " + refreshToken);
 
         assertNotNull(refreshToken);
@@ -64,7 +64,7 @@ public class JwtUtilsTest {
     @Test
     void testRefreshAccessToken() throws InterruptedException {
         String oldAccessToken = jwtUtils.generateAccessToken(authentication);
-        String refreshToken = jwtUtils.generateRefreshToken("user");
+        String refreshToken = jwtUtils.generateRefreshToken(1, "user");
         Thread.sleep(1000);
         String newAccessToken = jwtUtils.refreshAccessToken(oldAccessToken, refreshToken);
         System.out.println("Old Access Token: " + oldAccessToken);
@@ -80,7 +80,7 @@ public class JwtUtilsTest {
 
     @Test
     void testRotateRefreshToken() {
-        String refreshToken = jwtUtils.generateRefreshToken("user");
+        String refreshToken = jwtUtils.generateRefreshToken(1, "user");
         String rotateRefreshToken = jwtUtils.rotateRefreshToken(refreshToken);
         System.out.println("Refresh Token: " + refreshToken);
         System.out.println("Rotate Refresh Token: " + rotateRefreshToken);
