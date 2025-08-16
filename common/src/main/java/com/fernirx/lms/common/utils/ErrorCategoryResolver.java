@@ -16,14 +16,15 @@ public final class ErrorCategoryResolver {
 
     public static ErrorCategory resolveFrom(List<ErrorDetail> details) {
         return details.stream()
-                .map(ErrorCategoryResolver::mapCodeToCategory)
-                .min(Comparator.comparingInt(ErrorCategory::getPriority))
+                .map(ErrorCategoryResolver::mapCodeToErrorCode)
+                .filter(Optional::isPresent)
+                .flatMap(Optional::stream)
+                .min(Comparator.comparingInt(ErrorCode::getLevel))
+                .map(ErrorCode::getCategory)
                 .orElse(ErrorCategory.SERVER);
     }
 
-    private static ErrorCategory mapCodeToCategory(ErrorDetail detail) {
-        return Optional.ofNullable(detail.getCode())
-                .map(ErrorCode::getCategory)
-                .orElse(ErrorCategory.SERVER);
+    private static Optional<ErrorCode> mapCodeToErrorCode(ErrorDetail detail) {
+        return Optional.ofNullable(detail.getCode());
     }
 }
