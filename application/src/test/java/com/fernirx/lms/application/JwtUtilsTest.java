@@ -35,7 +35,7 @@ public class JwtUtilsTest {
     void beforeEach() {
         GrantedAuthority grantedAuthority = new SimpleGrantedAuthority("ROLE_USER");
         CustomUserDetails userDetails =
-                new CustomUserDetails(1, "user", "password", List.of(grantedAuthority));
+                new CustomUserDetails(1, "username", "password", List.of(grantedAuthority));
         authentication =
                 new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
@@ -47,24 +47,26 @@ public class JwtUtilsTest {
 
         assertNotNull(accessToken);
         assertTrue(jwtUtils.validateAccessToken(accessToken));
-        assertEquals("user", jwtUtils.extractUsername(accessToken));
+        assertEquals(1, Integer.parseInt(jwtUtils.extractSubject(accessToken)));
+        assertEquals("username", jwtUtils.extractUsername(accessToken));
         assertTrue(jwtUtils.extractAuthorities(accessToken).contains("ROLE_USER"));
     }
 
     @Test
     void testGenerateAndValidateRefreshToken() {
-        String refreshToken = jwtUtils.generateRefreshToken(1, "user");
+        String refreshToken = jwtUtils.generateRefreshToken(1, "username");
         System.out.println("Refresh Token: " + refreshToken);
 
         assertNotNull(refreshToken);
         assertTrue(jwtUtils.validateRefreshToken(refreshToken));
-        assertEquals("user", jwtUtils.extractUsername(refreshToken));
+        assertEquals(1, Integer.parseInt(jwtUtils.extractSubject(refreshToken)));
+        assertEquals("username", jwtUtils.extractUsername(refreshToken));
     }
 
     @Test
     void testRefreshAccessToken() throws InterruptedException {
         String oldAccessToken = jwtUtils.generateAccessToken(authentication);
-        String refreshToken = jwtUtils.generateRefreshToken(1, "user");
+        String refreshToken = jwtUtils.generateRefreshToken(1, "username");
         Thread.sleep(1000);
         String newAccessToken = jwtUtils.refreshAccessToken(oldAccessToken, refreshToken);
         System.out.println("Old Access Token: " + oldAccessToken);
@@ -73,21 +75,23 @@ public class JwtUtilsTest {
 
         assertNotNull(newAccessToken);
         assertTrue(jwtUtils.validateAccessToken(newAccessToken));
-        assertEquals("user", jwtUtils.extractUsername(newAccessToken));
+        assertEquals(1, Integer.parseInt(jwtUtils.extractSubject(newAccessToken)));
+        assertEquals("username", jwtUtils.extractUsername(newAccessToken));
         assertTrue(jwtUtils.extractAuthorities(newAccessToken).contains("ROLE_USER"));
         assertNotEquals(oldAccessToken, newAccessToken);
     }
 
     @Test
     void testRotateRefreshToken() {
-        String refreshToken = jwtUtils.generateRefreshToken(1, "user");
+        String refreshToken = jwtUtils.generateRefreshToken(1, "username");
         String rotateRefreshToken = jwtUtils.rotateRefreshToken(refreshToken);
         System.out.println("Refresh Token: " + refreshToken);
         System.out.println("Rotate Refresh Token: " + rotateRefreshToken);
 
         assertNotNull(rotateRefreshToken);
         assertEquals(refreshToken, rotateRefreshToken);
-        assertEquals("user", jwtUtils.extractUsername(rotateRefreshToken));
+        assertEquals(1, Integer.parseInt(jwtUtils.extractSubject(rotateRefreshToken)));
+        assertEquals("username", jwtUtils.extractUsername(rotateRefreshToken));
         assertTrue(jwtUtils.validateRefreshToken(rotateRefreshToken));
     }
 

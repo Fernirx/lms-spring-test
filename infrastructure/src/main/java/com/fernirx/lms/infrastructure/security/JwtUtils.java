@@ -1,6 +1,7 @@
 package com.fernirx.lms.infrastructure.security;
 
 import com.fernirx.lms.common.constants.SecurityConstants;
+import com.fernirx.lms.common.exceptions.InvalidTokenTypeException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -110,8 +111,7 @@ public class JwtUtils {
             String tokenType = claims.get(SecurityConstants.JWT_CLAIMS_TYPE).toString();
 
             if (!expectedType.equals(tokenType)) {
-                log.error("Invalid token type. Expected {} but got {}", expectedType, tokenType);
-                throw new IllegalArgumentException("Invalid JWT token type");
+                throw new InvalidTokenTypeException(expectedType, tokenType);
             }
 
             return true;
