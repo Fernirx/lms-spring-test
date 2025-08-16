@@ -17,6 +17,9 @@ public final class ErrorMessages {
     public static final String INVALID_CREDENTIALS = "Invalid credentials";
     public static final String EXPIRED_TOKEN = "Token expired";
     public static final String ACCESS_DENIED = "Access denied";
+    public static final String INVALID_TOKEN_TYPE = "Invalid token type";
+    public static final String TOKEN_EXPIRED = "Token has expired";
+    public static final String INVALID_TOKEN_FORMAT = "Malformed JWT token";
 
     // ========== RESOURCE NOT FOUND MESSAGES ==========
     public static final String USER_NOT_FOUND = "User not found";
