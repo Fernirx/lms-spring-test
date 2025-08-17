@@ -49,10 +49,10 @@
             <artifactId>jjwt</artifactId>
         </dependency>
 
-        <!-- Jakarta Annotation -->
+        <!-- Jakarta Servlet -->
         <dependency>
-            <groupId>jakarta.annotation</groupId>
-            <artifactId>jakarta.annotation-api</artifactId>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
         </dependency>
 
         <!-- Lombok -->
