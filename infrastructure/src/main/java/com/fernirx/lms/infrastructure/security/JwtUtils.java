@@ -1,7 +1,7 @@
 package com.fernirx.lms.infrastructure.security;
 
 import com.fernirx.lms.common.constants.SecurityConstants;
-import com.fernirx.lms.common.exceptions.InvalidTokenTypeException;
+import com.fernirx.lms.common.exceptions.*;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -115,12 +115,16 @@ public class JwtUtils {
             }
 
             return true;
-        } catch (ExpiredJwtException | MalformedJwtException | UnsupportedJwtException |
-                 SecurityException | IllegalArgumentException e) {
-            throw e;
+        } catch (ExpiredJwtException e) {
+            throw new ExpiredTokenException();
+        } catch (MalformedJwtException e) {
+            throw new MalformedTokenException();
+        } catch (UnsupportedJwtException e) {
+            throw new UnsupportedTokenException();
+        } catch (SecurityException |  IllegalArgumentException e) {
+            throw new InvalidTokenException();
         } catch (Exception e) {
-            log.error("Unexpected JWT validation error", e);
-            throw new IllegalArgumentException("JWT validation failed", e);
+            throw new JwtValidationException();
         }
     }
 
