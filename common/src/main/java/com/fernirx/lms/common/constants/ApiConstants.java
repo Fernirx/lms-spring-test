@@ -4,6 +4,7 @@ public final class ApiConstants {
 
     // Base Paths
     public static final String AUTH_PATH = "/auth";
+    public static final String REFRESH_TOKEN_PATH = "/refresh_token";
     public static final String USERS_PATH = "/users";
     public static final String STUDENTS_PATH = "/students";
     public static final String TEACHERS_PATH = "/teachers";
