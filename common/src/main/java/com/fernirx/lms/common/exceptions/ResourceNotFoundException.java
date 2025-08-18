@@ -1,7 +1,10 @@
 package com.fernirx.lms.common.exceptions;
 
+import com.fernirx.lms.common.dtos.responses.ErrorDetail;
+import com.fernirx.lms.common.enums.ErrorCode;
+
 public class ResourceNotFoundException extends LmsException {
-    public ResourceNotFoundException(String resourceName, Object resourceId) {
-        super(String.format("%s with id '%s' not found", resourceName, resourceId));
+    public ResourceNotFoundException(ErrorCode errorCode) {
+        super(errorCode);
     }
 }

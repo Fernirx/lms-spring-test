@@ -40,6 +40,13 @@ server:
   servlet:
     context-path: ${SERVER_CONTEXT_PATH:/api/your-project-name}
 
+# === JWT Configuration ===
+jwt:
+  secret: ${JWT_SECRET}  # Base64 encoded
+  expiration: ${JWT_EXPIRATION:86400000}  # 24 hours
+  refresh-expiration: ${JWT_REFRESH_EXPIRATION:604800000}  # 7 days
+  issuer: ${JWT_ISSUER:LMS}
+
 # === Swagger/OpenAPI Configuration (for dev/docs) ===
 springdoc:
   api-docs:

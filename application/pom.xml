@@ -26,6 +26,13 @@
 
     <!-- ========== Dependency Management ========= -->
     <dependencies>
+        <!-- Infrastructure -->
+        <dependency>
+            <groupId>com.fernirx</groupId>
+            <artifactId>infrastructure</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
         <!-- Web Starter -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -15,8 +15,13 @@ public final class ErrorMessages {
 
     // ========== AUTHENTICATION ERROR MESSAGES ==========
     public static final String INVALID_CREDENTIALS = "Invalid credentials";
-    public static final String EXPIRED_TOKEN = "Token expired";
     public static final String ACCESS_DENIED = "Access denied";
+    public static final String INVALID_TOKEN = "The provided JWT token is invalid";
+    public static final String JWT_VALIDATION_FAILED = "An unexpected error occurred during JWT validation.";
+    public static final String EXPIRED_TOKEN = "Token expired";
+    public static final String INVALID_TOKEN_TYPE = "Invalid token type";
+    public static final String INVALID_TOKEN_FORMAT = "Malformed JWT token";
+    public static final String UNSUPPORTED_TOKEN = "Unsupported JWT token";
 
     // ========== RESOURCE NOT FOUND MESSAGES ==========
     public static final String USER_NOT_FOUND = "User not found";
