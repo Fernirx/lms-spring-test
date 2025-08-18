@@ -55,7 +55,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> buildErrorResponse(ErrorCode errorCode) {
         ErrorDetail detail = ErrorDetail.of(errorCode, errorCode.getMessage());
         ErrorCategory category = errorCode.getCategory();
-        
+
         ErrorResponse errorResponse = ErrorResponse.of(
                 category,
                 category.getMessage(),

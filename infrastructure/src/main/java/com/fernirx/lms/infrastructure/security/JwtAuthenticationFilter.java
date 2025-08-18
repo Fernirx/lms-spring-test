@@ -1,7 +1,6 @@
 package com.fernirx.lms.infrastructure.security;
 
 import com.fernirx.lms.common.constants.ApiConstants;
-import com.fernirx.lms.common.exceptions.*;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -45,7 +44,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             var username = jwtUtils.extractUsername(token);
             CustomUserDetails userDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(username);
 
-            UsernamePasswordAuthenticationToken  authentication =
+            UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authentication);

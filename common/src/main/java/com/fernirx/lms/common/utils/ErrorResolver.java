@@ -1,8 +1,6 @@
 package com.fernirx.lms.common.utils;
 
 import com.fernirx.lms.common.dtos.responses.ErrorDetail;
-import com.fernirx.lms.common.dtos.responses.ErrorResponse;
-import com.fernirx.lms.common.enums.ErrorCategory;
 import com.fernirx.lms.common.enums.ErrorCode;
 
 import java.util.Comparator;

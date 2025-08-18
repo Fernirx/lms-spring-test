@@ -8,11 +8,13 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Component
@@ -121,7 +123,7 @@ public class JwtUtils {
             throw new MalformedTokenException();
         } catch (UnsupportedJwtException e) {
             throw new UnsupportedTokenException();
-        } catch (SecurityException |  IllegalArgumentException e) {
+        } catch (SecurityException | IllegalArgumentException e) {
             throw new InvalidTokenException();
         } catch (Exception e) {
             throw new JwtValidationException();

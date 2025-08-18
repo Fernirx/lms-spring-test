@@ -17,7 +17,7 @@ public class EnumValidator implements ConstraintValidator<ValidEnum, String> {
     public void initialize(ValidEnum annotation) {
         ignoreCase = annotation.ignoreCase();
         allowNull = annotation.allowNull();
-        Enum<?>[]  enums = annotation.enumClass().getEnumConstants();
+        Enum<?>[] enums = annotation.enumClass().getEnumConstants();
         enumValues = Arrays.stream(enums)
                 .map(Enum::name)
                 .collect(Collectors.toList());

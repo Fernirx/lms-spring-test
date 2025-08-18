@@ -1,9 +1,7 @@
 package com.fernirx.lms.application;
 
 import com.fernirx.lms.infrastructure.security.CustomUserDetails;
-import com.fernirx.lms.infrastructure.security.JwtProperties;
 import com.fernirx.lms.infrastructure.security.JwtUtils;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +14,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 public class JwtUtilsTest {
