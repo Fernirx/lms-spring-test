@@ -1,5 +1,6 @@
 package com.fernirx.lms.common.enums;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.fernirx.lms.common.constants.ErrorMessages;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -112,6 +113,11 @@ public enum ErrorCode {
     private final ErrorCategory category;
     private final HttpStatus httpStatus;
     private final Priority priority;
+
+    @JsonValue
+    public String getCode() {
+        return code;
+    }
 
     public static Optional<ErrorCode> fromCode(String code) {
         return Arrays.stream(values())

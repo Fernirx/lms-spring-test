@@ -1,5 +1,6 @@
 package com.fernirx.lms.common.enums;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,5 +18,10 @@ public enum ErrorCategory {
     SERVER("SERVER", "Internal server errors");
 
     private final String code;
-    private final String description;
+    private final String message;
+
+    @JsonValue
+    public String getCode() {
+        return code;
+    }
 }
