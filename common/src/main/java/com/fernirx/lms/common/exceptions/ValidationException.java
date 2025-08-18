@@ -1,15 +1,14 @@
 package com.fernirx.lms.common.exceptions;
 
+import com.fernirx.lms.common.enums.ErrorCode;
 import lombok.Getter;
 
 import java.util.List;
 
 @Getter
-public class ValidationException extends RuntimeException {
-    private final List<String> errors;
+public class ValidationException extends LmsException {
 
-    public ValidationException(List<String> errors) {
-        super("Validation failed");
-        this.errors = errors;
+    public ValidationException(ErrorCode errorCode) {
+        super(errorCode);
     }
 }
