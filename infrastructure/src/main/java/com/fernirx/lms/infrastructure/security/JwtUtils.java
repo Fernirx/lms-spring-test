@@ -91,7 +91,7 @@ public class JwtUtils {
 
         return Jwts.builder()
                 .claims(claims)
-                .subject(String.valueOf(userId)) // sub = id
+                .subject(String.valueOf(userId))
                 .issuedAt(now)
                 .expiration(expirationDate)
                 .issuer(jwtProperties.getIssuer())
