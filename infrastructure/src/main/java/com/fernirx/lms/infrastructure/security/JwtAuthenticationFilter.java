@@ -16,6 +16,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -27,31 +28,27 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        if (request.getRequestURI().equals(ApiConstants.AUTH_PATH + ApiConstants.REFRESH_TOKEN_PATH)) {
+        String path = request.getServletPath();
+
+        List<String> skipPaths = List.of(
+                ApiConstants.AUTH_PATH + ApiConstants.LOGIN_PATH,
+                ApiConstants.AUTH_PATH + ApiConstants.REFRESH_TOKEN_PATH
+        );
+
+        if (skipPaths.contains(path)) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        try {
+        String token = parseJwt(request);
+        if (token != null && jwtUtils.validateAccessToken(token)) {
+            var username = jwtUtils.extractUsername(token);
+            CustomUserDetails userDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(username);
 
-            String token = parseJwt(request);
-            if (token != null && jwtUtils.validateAccessToken(token)) {
-                var subject = jwtUtils.extractSubject(token);
-                var username = jwtUtils.extractUsername(token);
-                CustomUserDetails userDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(username);
-
-                UsernamePasswordAuthenticationToken  authentication =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
-        } catch (ExpiredTokenException |
-                 InvalidTokenException |
-                 InvalidTokenTypeException |
-                 MalformedTokenException |
-                 UnsupportedTokenException |
-                 JwtValidationException ex) {
-            throw ex;
+            UsernamePasswordAuthenticationToken  authentication =
+                    new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request, response);
     }
