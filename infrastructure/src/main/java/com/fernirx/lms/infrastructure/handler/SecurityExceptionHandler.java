@@ -2,6 +2,7 @@ package com.fernirx.lms.infrastructure.handler;
 
 import com.fernirx.lms.common.dtos.responses.ErrorDetail;
 import com.fernirx.lms.common.dtos.responses.ErrorResponse;
+import com.fernirx.lms.common.enums.ErrorCategory;
 import com.fernirx.lms.common.enums.ErrorCode;
 import com.fernirx.lms.common.exceptions.*;
 import lombok.extern.slf4j.Slf4j;
@@ -50,11 +51,13 @@ public class SecurityExceptionHandler {
     }
 
     public ResponseEntity<ErrorResponse> buildErrorResponse(ErrorCode errorCode) {
-        ErrorDetail errorDetail = ErrorDetail.of(errorCode);
+        ErrorDetail detail = ErrorDetail.of(errorCode, errorCode.getMessage());
+        ErrorCategory category = errorCode.getCategory();
+
         ErrorResponse errorResponse = ErrorResponse.of(
-                errorCode.getCategory(),
-                errorCode.getMessage(),
-                errorDetail
+                category,
+                category.getMessage(),
+                detail
         );
         return ResponseEntity
                 .status(errorCode.getHttpStatus())
