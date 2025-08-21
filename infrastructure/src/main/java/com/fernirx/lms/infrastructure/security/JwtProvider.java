@@ -6,7 +6,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
-import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -16,15 +16,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Slf4j
 @Component
+@RequiredArgsConstructor
 public class JwtProvider {
     private final JwtProperties jwtProperties;
     private SecretKey key;
-
-    public JwtProvider(JwtProperties jwtProperties) {
-        this.jwtProperties = jwtProperties;
-    }
 
     @PostConstruct
     public void init() {
