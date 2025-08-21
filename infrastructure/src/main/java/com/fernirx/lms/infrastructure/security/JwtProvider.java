@@ -18,11 +18,11 @@ import java.util.Map;
 
 @Slf4j
 @Component
-public class JwtUtils {
+public class JwtProvider {
     private final JwtProperties jwtProperties;
     private SecretKey key;
 
-    public JwtUtils(JwtProperties jwtProperties) {
+    public JwtProvider(JwtProperties jwtProperties) {
         this.jwtProperties = jwtProperties;
     }
 
