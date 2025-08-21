@@ -9,10 +9,6 @@ import java.util.Optional;
 
 public final class ErrorResolver {
 
-    private ErrorResolver() {
-        throw new UnsupportedOperationException("Utility class ");
-    }
-
     public static Optional<ErrorCode> getHighestPriorityErrorCode(List<ErrorDetail> details) {
         return details.stream()
                 .map(ErrorResolver::mapDetailToErrorCode)
@@ -22,5 +18,9 @@ public final class ErrorResolver {
 
     private static Optional<ErrorCode> mapDetailToErrorCode(ErrorDetail detail) {
         return Optional.ofNullable(detail.getCode());
+    }
+
+    private ErrorResolver() {
+        throw new UnsupportedOperationException("Utility class");
     }
 }

@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class EnumValidator implements ConstraintValidator<ValidEnum, String> {
-
     private List<String> enumValues;
     private boolean allowNull;
     private boolean ignoreCase;

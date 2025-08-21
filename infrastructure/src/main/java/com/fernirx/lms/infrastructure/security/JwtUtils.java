@@ -19,7 +19,6 @@ import java.util.Map;
 @Slf4j
 @Component
 public class JwtUtils {
-
     private final JwtProperties jwtProperties;
     private SecretKey key;
 

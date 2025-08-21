@@ -12,6 +12,7 @@ import java.util.Optional;
 @Getter
 @RequiredArgsConstructor
 public enum ErrorCode {
+
     // ========== SYSTEM ERRORS ==========
     METHOD_NOT_ALLOWED("ERR_METHOD_NOT_ALLOWED", ErrorMessages.METHOD_NOT_ALLOWED,
             ErrorCategory.METHOD_NOT_ALLOWED, HttpStatus.METHOD_NOT_ALLOWED, Priority.MEDIUM),

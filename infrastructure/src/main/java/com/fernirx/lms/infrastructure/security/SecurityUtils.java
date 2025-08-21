@@ -9,8 +9,6 @@ import java.util.stream.Collectors;
 
 public final class SecurityUtils {
 
-    private SecurityUtils() {}
-
     public static CustomUserDetails getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails) {
@@ -23,5 +21,9 @@ public final class SecurityUtils {
         return customUserDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
+    }
+
+    private SecurityUtils() {
+        throw new UnsupportedOperationException("Utility class");
     }
 }
