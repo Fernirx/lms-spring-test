@@ -31,9 +31,10 @@ public class JwtProvider {
         );
     }
 
+    // ==== PUBLIC API ====
+
     public String generateAccessToken(Authentication authentication) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-
         return createToken(
                 SecurityConstants.JWT_ACCESS_TOKEN,
                 userDetails.getId(),
@@ -55,9 +56,11 @@ public class JwtProvider {
 
     public String refreshAccessToken(String accessToken, String refreshToken) {
         validateRefreshToken(refreshToken);
+
         int userId = Integer.parseInt(extractSubject(refreshToken));
         String username = extractUsername(refreshToken);
         List<String> authorities = extractAuthoritiesIgnoreExpiry(accessToken);
+
         return createToken(
                 SecurityConstants.JWT_ACCESS_TOKEN,
                 userId,
@@ -69,29 +72,11 @@ public class JwtProvider {
 
     public String rotateRefreshToken(String oldRefreshToken) {
         validateRefreshToken(oldRefreshToken);
+
         int userId = Integer.parseInt(extractSubject(oldRefreshToken));
         String username = extractUsername(oldRefreshToken);
+
         return generateRefreshToken(userId, username);
-    }
-
-    private String createToken(String type, int userId, String username, List<String> authorities, long expirationMillis) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put(SecurityConstants.JWT_CLAIMS_TYPE, type);
-        claims.put(SecurityConstants.JWT_CLAIMS_USERNAME, username);
-        if (authorities != null) {
-            claims.put(SecurityConstants.JWT_CLAIMS_AUTHORITIES, authorities);
-        }
-        Date now = new Date();
-        Date expirationDate = new Date(now.getTime() + expirationMillis);
-
-        return Jwts.builder()
-                .claims(claims)
-                .subject(String.valueOf(userId))
-                .issuedAt(now)
-                .expiration(expirationDate)
-                .issuer(jwtProperties.getIssuer())
-                .signWith(key)
-                .compact();
     }
 
     public boolean validateAccessToken(String token) {
@@ -102,42 +87,12 @@ public class JwtProvider {
         return validateToken(token, SecurityConstants.JWT_REFRESH_TOKEN);
     }
 
-    public boolean validateToken(String token, String expectedType) {
+    public boolean isTokenExpired(String token) {
         try {
-            Claims claims = extractAllClaims(token);
-            String tokenType = claims.get(SecurityConstants.JWT_CLAIMS_TYPE).toString();
-
-            if (!expectedType.equals(tokenType)) {
-                throw new InvalidTokenTypeException(expectedType, tokenType);
-            }
-
+            Date expiration = extractAllClaims(token).getExpiration();
+            return expiration.before(new Date());
+        } catch (ExpiredJwtException e) {
             return true;
-        } catch (ExpiredJwtException e) {
-            throw new ExpiredTokenException();
-        } catch (MalformedJwtException e) {
-            throw new MalformedTokenException();
-        } catch (UnsupportedJwtException e) {
-            throw new UnsupportedTokenException();
-        } catch (SecurityException | IllegalArgumentException e) {
-            throw new InvalidTokenException();
-        } catch (Exception e) {
-            throw new JwtValidationException();
-        }
-    }
-
-    private Claims extractAllClaims(String token) {
-        return Jwts.parser()
-                .verifyWith(key)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
-    }
-
-    private Claims extractAllClaimsIgnoreExpiry(String token) {
-        try {
-            return extractAllClaims(token);
-        } catch (ExpiredJwtException e) {
-            return e.getClaims();
         }
     }
 
@@ -170,12 +125,76 @@ public class JwtProvider {
         return List.of();
     }
 
-    public boolean isTokenExpired(String token) {
+    // ==== PRIVATE HELPERS ====
+
+    private String createToken(String type, int userId, String username,
+                               List<String> authorities, long expirationMillis) {
+        Map<String, Object> claims =buildClaims(type, username, authorities);
+        return buildJwtToken(String.valueOf(userId), claims, expirationMillis);
+    }
+
+    private String buildJwtToken(String subject, Map<String, Object> claims, long expirationMillis) {
+        Date now = new Date();
+        Date expirationDate = new Date(now.getTime() + expirationMillis);
+        return Jwts.builder()
+                .claims(claims)
+                .subject(subject)
+                .issuedAt(now)
+                .expiration(expirationDate)
+                .issuer(jwtProperties.getIssuer())
+                .signWith(key)
+                .compact();
+    }
+
+    private Map<String, Object> buildClaims(String type, String username,  List<String> authorities) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put(SecurityConstants.JWT_CLAIMS_TYPE, type);
+        claims.put(SecurityConstants.JWT_CLAIMS_USERNAME, username);
+        if (authorities != null) {
+            claims.put(SecurityConstants.JWT_CLAIMS_AUTHORITIES, authorities);
+        }
+        return claims;
+    }
+
+    private boolean validateToken(String token, String expectedType) {
         try {
-            Date expiration = extractAllClaims(token).getExpiration();
-            return expiration.before(new Date());
-        } catch (ExpiredJwtException e) {
+            Claims claims = extractAllClaims(token);
+            String tokenType = claims.get(SecurityConstants.JWT_CLAIMS_TYPE).toString();
+
+            if (!expectedType.equals(tokenType)) {
+                throw new InvalidTokenTypeException(expectedType, tokenType);
+            }
+
             return true;
+        } catch (JwtException e) {
+            handleJwtException(e);
+            return false;
+        }
+    }
+
+    private void handleJwtException(JwtException e) {
+        switch (e) {
+            case ExpiredJwtException ex -> throw new ExpiredTokenException();
+            case MalformedJwtException ex -> throw new MalformedTokenException();
+            case UnsupportedJwtException ex -> throw new UnsupportedTokenException();
+            case io.jsonwebtoken.security.SecurityException ex -> throw new InvalidTokenException();
+            default -> throw new JwtValidationException();
+        }
+    }
+
+    private Claims extractAllClaims(String token) {
+        return Jwts.parser()
+                .verifyWith(key)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+    }
+
+    private Claims extractAllClaimsIgnoreExpiry(String token) {
+        try {
+            return extractAllClaims(token);
+        } catch (ExpiredJwtException e) {
+            return e.getClaims();
         }
     }
 }
