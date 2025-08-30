@@ -30,5 +30,6 @@ jobs:
       - name: Maven clean
         run: |
           echo "Cleaning up old build..."
+          chmod +x /mvnw
           ./mvnw clean
           echo "Clean complete!"
