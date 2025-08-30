@@ -14,6 +14,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Source code
+        run: |
+          echo "File in project"
+          ls -l -a
+
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
